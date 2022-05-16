@@ -7,8 +7,6 @@ using namespace std;
 #include <string>
 
 #include <vector>
-#include <unordered_map>
-
 #include <memory>
 
 
@@ -17,13 +15,12 @@ class IComponent{
 
     public:
 
-        // WHY NOT pure virtual?
-        virtual void render(sf::RenderWindow& ref){};
-        virtual void SetPosition(float x, float y){};
+        // Pure Virtual: Need to be implemented in Inheriting classes
+        virtual void render(sf::RenderWindow& ref) = 0;
+        virtual void SetPosition(float x, float y) = 0;
 
         // Releases Base Resources
         virtual ~IComponent(){};
-
 };
 
 
@@ -31,21 +28,23 @@ class Sprite2DComponent : public IComponent{
 
     public:
 
+        Sprite2DComponent(){}
+
         Sprite2DComponent(std::string filepath){
             m_texture.loadFromFile(filepath);
             m_sprite.setTexture(m_texture);
 
             m_sprite.setScale(0.2, 0.2);
-
         }
 
-        void SetPosition(float x, float y){
+        virtual void SetPosition(float x, float y) override{
             m_sprite.setPosition(x, y);
         }
 
         void render(sf::RenderWindow& ref) override{
             ref.draw(m_sprite);
         }
+
 
         // Releases Derived Class Resources
         ~Sprite2DComponent(){}
@@ -61,89 +60,66 @@ class Sprite2DComponent : public IComponent{
 };
 
 
-// Entitites such as Start / End Markers, Current / Searching Algo Positions 
-class GameEntity{
+class mapCell : public Sprite2DComponent{
+
     public:
-        GameEntity(string name){
-            n_name = name;
-        }
 
-        ~GameEntity(){}
+        mapCell(string filepath, bool isTgt, bool isWall, bool isStart, bool isExplored){
 
-        float getXPos() const{return m_x;}
-        float getYPos() const{return m_y;}
+            m_texture.loadFromFile(filepath);
+            m_sprite.setTexture(m_texture);
 
-        void addComponent(string filename, float x, float y){
-            shared_ptr<Sprite2DComponent> comp = make_shared<Sprite2DComponent>(filename);
-            comp->SetPosition(x, y);
-            m_components.push_back(comp);
-        }
+            m_sprite.setScale(0.2, 0.2);
 
-        // Render all drawable components
-        void RenderComponents(sf::RenderWindow& ref){
-
-            for(int i = 0; i < m_components.size(); i++){
-                m_components[i]->render(ref);
-            }
+            isTarget = isTgt;
+            isWall = isWall;
+            isStart = isStart;
+            isExplored = isExplored;
 
         }
 
-        // Why setting positions for all entities????
-        // void SetPosition(float x, float y){
+        void SetPosition(float x, float y) override{
+            m_sprite.setPosition(x, y);
+        }
 
-        //     for(int i = 0; i < m_components.size(); i++){
+        void render(sf::RenderWindow& ref) override{
+            ref.draw(m_sprite);
+        }
 
-        //         m_components[i]->SetPosition(x, y);
-        //     }
-        // }
+        void setTexture(string filepath){
+            m_texture.loadFromFile(filepath);
+            m_sprite.setTexture(m_texture);
+            m_sprite.setScale(0.2, 0.2);
+        }
+
+        ~mapCell(){}
 
 
     private:
+        sf::Texture m_texture;
+        sf::Sprite m_sprite;
 
-        float m_x, m_y; // Game Entity positions
-        string n_name; // Entity Name
-        vector< shared_ptr<IComponent> > m_components; // Embedded Components
-
-};
-
-
-class Board{
+        bool isTarget;
+        bool isWall;
+        bool isStart;
+        bool isExplored;
 
 };
 
-
-struct hash_pair {
-    
-    size_t operator()(const pair<int, int>& p) const
-    {
-        auto hash1 = hash<int>{}(p.first);
-        auto hash2 = hash<int>{}(p.second);
- 
-        if (hash1 != hash2) {
-            return hash1 ^ hash2;             
-        }
-         
-        // If hash1 == hash2, their XOR is zero.
-          return hash1;
-    }
-};
 
 
 int main()
 {
     // Main Rendering Window 
-    sf::RenderWindow window(sf::VideoMode(2500, 2500), "Main Window!");
+    sf::RenderWindow window(sf::VideoMode(2025, 2025), "Main Window!");
     window.setFramerateLimit(60);
 
-
-    sf::RectangleShape cell(sf::Vector2f(60,60));
-    cell.setPosition(sf::Vector2f(0, 0));
-    cell.setFillColor(sf::Color::Black);
-    cell.move(60, 60);
+    // sf::RectangleShape cell(sf::Vector2f(60,60));
+    // cell.setPosition(sf::Vector2f(0, 0));
+    // cell.setFillColor(sf::Color::Black);
+    // cell.move(60, 60);
 
  
-
-
     // Mouse Release Check
     bool mouseReleased = false;
 
@@ -154,26 +130,22 @@ int main()
 
     // Generate the Board:
 
-    vector<shared_ptr<Sprite2DComponent>> boardCells;
-    vector<shared_ptr<Sprite2DComponent>> wallCells;
+    vector<shared_ptr<mapCell>> boardCells;
 
     for(int i = 0; i < window.getSize().y;){
 
         for(int k = 0; k < window.getSize().x;){
 
-            shared_ptr<Sprite2DComponent> test= make_shared<Sprite2DComponent>("../assets-static/cell.jpg");
+            shared_ptr<mapCell> test= make_shared<mapCell>("../assets-static/cell.jpg", false, false, false, false);
             test->SetPosition(k, i);
 
             boardCells.push_back(test);
 
-            k+=50;
+            k+=45;
         }
 
-        i+=50;
+        i+=45;
     }
-
-
-
 
 
     // Set up fonts
@@ -185,14 +157,21 @@ int main()
     text.setPosition(sf::Vector2f(20, 50));
 
 
+    bool isStartSet = false;
+    bool isFinishSet = false; // Run the algorithm on true
+
+    bool depthFirstSearch = false;
+    bool breadthFirstSearch = false;
+
+
     // Rendering Window Outer loop
     while (window.isOpen())
     {
         // Declare an event to be handled later
+        // Events put into a queue and processed one by ones
         sf::Event event;
         
-        // Events put into a queue and processed one by ones
-        
+
         while (window.pollEvent(event))
         {
             // Compute the frame rate:
@@ -201,13 +180,12 @@ int main()
 
             cout<<"FPS: "<<fps<<endl;
 
-
             // Some event handling examples
-
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            // Colour the texture
+
+            // Set the Walls
             if(event.type == sf::Event::MouseButtonPressed){
                 // Gets Positions in window coordinates
                 int xPos = sf::Mouse::getPosition(window).x;
@@ -216,27 +194,45 @@ int main()
                 cout<<yPos<<endl;
 
                 // Calculate the Cell index & replace
-                int cellIdx = (yPos/50) * 50 + xPos / 50;
+                int cellIdx = (yPos/45) * 45 + xPos / 45;
                 cout<<"Cell IDX is "<<cellIdx<<endl;
 
-                boardCells[cellIdx] = make_shared<Sprite2DComponent>("../assets-static/cell-red.jpg");
-                boardCells[cellIdx]->SetPosition(xPos - xPos%50, yPos - yPos%50);
-                cout<<"Position set at "<<xPos - xPos%50<<" And :"<<yPos - yPos%50<<endl;
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
+                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-red.jpg", false, true, false, false);
+                }
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)){
+                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-finish.jpg", true, false, false, false);
+                    isFinishSet = true;
+                }
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)){
+                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-start.jpg", true, false, false, false);
+                    isStartSet = true;
+                }
+                else{
+                    continue;
+                }
+
+
+                boardCells[cellIdx]->SetPosition(xPos - xPos%45, yPos - yPos%45);
+                cout<<"Position set at "<<xPos - xPos%45<<" And :"<<yPos - yPos%45<<endl;
+
             }
 
-            
+
             // Rendering
             window.clear();
-            // board.render(window);
 
-            // Draw all sprites
+            // Draw Board Cells
             for(int i = 0; i < boardCells.size(); i++){
                 boardCells[i]->render(window);
             }
 
             window.draw(text);
-            window.draw(cell);
             window.display();
+
+            if(isFinishSet){
+                return EXIT_SUCCESS;
+            }
 
         }
 
