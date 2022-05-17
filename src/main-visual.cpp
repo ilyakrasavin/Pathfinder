@@ -23,7 +23,7 @@ int main()
     // cell.setFillColor(sf::Color::Black);
     // cell.move(60, 60);
 
- 
+
     // Mouse Release Check
     bool mouseReleased = false;
 
@@ -106,11 +106,11 @@ int main()
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
                     boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-red.jpg", false, true, false, false);
                 }
-                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)){
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isFinishSet){
                     boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-finish.jpg", true, false, false, false);
                     isFinishSet = true;
                 }
-                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)){
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && !isStartSet){
                     boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-start.jpg", true, false, false, false);
                     isStartSet = true;
                 }
@@ -143,8 +143,7 @@ int main()
 
             // Further Graph updates and rendering done within the algorithm
 
-            
-
+        
 
                 return EXIT_SUCCESS;
             }
