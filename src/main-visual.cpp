@@ -12,6 +12,10 @@ using namespace std;
 #include "Interface.hpp"
 #include "Graph.hpp"
 
+
+#include "Algorithms/BFS.hpp"
+
+
 int main()
 {
     // Main Rendering Window 
@@ -68,6 +72,8 @@ int main()
 
     bool depthFirstSearch = false;
     bool breadthFirstSearch = false;
+
+
 
 
     // Rendering Window Outer loop
@@ -138,12 +144,14 @@ int main()
 
             if(isFinishSet){
 
-            // Initialize the Graph and pass it to the algorithm
-            // Pass the reference to the window
+                // Initialize the Graph and pass it to the algorithm
+                // Pass the reference to the window
+                // Further Graph updates and rendering done within the algorithm
 
-            // Further Graph updates and rendering done within the algorithm
+                Graph graph(&boardCells);
 
-        
+                // bool SearchResult = BreadthFirstSearch(&graph, &window);
+
 
                 return EXIT_SUCCESS;
             }

@@ -1,3 +1,6 @@
+#ifndef INTERFACE_H
+#define INTERFACE_H
+
 // Base Interface for all components
 class IComponent{
 
@@ -80,6 +83,13 @@ class mapCell : public Sprite2DComponent{
             m_sprite.setScale(0.2, 0.2);
         }
 
+
+        bool checkIsTarget(){return isTarget;}
+        bool checkIsWall(){return isWall;}
+        bool checkIsStart(){return isStart;}
+        bool checkIsExplored(){return isExplored;}
+        int setIdx(int);
+
         ~mapCell(){}
 
 
@@ -92,5 +102,10 @@ class mapCell : public Sprite2DComponent{
         bool isStart;
         bool isExplored;
 
+        int cellIdx;
+
 };
 
+
+
+#endif
