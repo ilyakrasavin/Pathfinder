@@ -111,6 +111,9 @@ class Node{
         bool isExploredNode;
         bool isTargetNode;
 
+
+        // MOVE INTO SEPARATE NODE SUBCLASSES
+
         // Weights May be used for heuristic-based algorithms (A* ..)
         float nextRightWeight;
         float prevLeftWeight;
@@ -148,7 +151,8 @@ class Graph{
     public:
 
         // Initialization Pass -> Connection Pass
-        Graph(vector<shared_ptr<mapCell>>* board);
+        // REMOVE WINDOW REFERENCE LATER
+        Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref);
         Node* getStartNode();
         // void moveCurrent();
     
@@ -167,7 +171,8 @@ class Graph{
 };
 
 
-Graph::Graph(vector<shared_ptr<mapCell>>* board){
+// REMOVE WINDOW REFERENCE LATER
+Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref){
 
     // Traverse the board and create nodes
 
@@ -185,12 +190,29 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board){
 
     int matrixSize = this->nodeMatrix.size();
 
+    // TODO
     // Calculations below determine the position/possible connections of a Node
     for(int nodeMapIdx = 0; nodeMapIdx < matrixSize; nodeMapIdx++){
+
+        // + RENDER FOR TESTING PURPOSES
+
 
         // Top Left Node
         if(nodeMapIdx % 45 == 0 && (nodeMapIdx == 0)){
             cout<<"Top left node"<<endl;
+
+            ref.clear();
+            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+
+            for(int i = 0; i < matrixSize; i ++){
+    
+                // Draw Board Cells
+                board->at(i)->render(ref);
+
+            }
+            ref.display();
+
+
             // Connect
         }
 
@@ -198,20 +220,71 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board){
         else if(nodeMapIdx % 45 == 44 && nodeMapIdx == 44){
             cout<<"Top Right node"<<endl;
 
+            ref.clear();
+            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+
+            for(int i = 0; i < matrixSize; i ++){
+    
+                // Draw Board Cells
+                board->at(i)->render(ref);
+
+            }
+            ref.display();
+
+
         }
 
         // Bottom Left Node
         else if(nodeMapIdx % 45 == 0 && nodeMapIdx + 45 > matrixSize){
+
+            ref.clear();
+            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+
+            for(int i = 0; i < matrixSize; i ++){
+    
+                // Draw Board Cells
+                board->at(i)->render(ref);
+
+            }
+            ref.display();
+
 
         }
 
         // Bottom Right Node
         else if(nodeMapIdx % 45 == 44 && (nodeMapIdx + 1 > matrixSize)){
 
+            ref.clear();
+            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+
+            for(int i = 0; i < matrixSize; i ++){
+    
+                // Draw Board Cells
+                board->at(i)->render(ref);
+
+            }
+            ref.display();
+
+
         }
 
         // Left Edge Node
         else if(nodeMapIdx % 45 == 0){
+
+            cout<<"Left Edge node"<<endl;
+
+
+            ref.clear();
+            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+
+            for(int i = 0; i < matrixSize; i ++){
+    
+                // Draw Board Cells
+                board->at(i)->render(ref);
+
+            }
+            ref.display();
+
 
         }
 
@@ -219,10 +292,33 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board){
         // Right Edge Node
         else if(nodeMapIdx % 45 == 44){
 
+            ref.clear();
+            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+
+            for(int i = 0; i < matrixSize; i ++){
+    
+                // Draw Board Cells
+                board->at(i)->render(ref);
+
+            }
+            ref.display();
+
         }
 
         // Middle node
         else{
+
+            ref.clear();
+            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+
+            for(int i = 0; i < matrixSize; i ++){
+
+                // Render and Draw all Board Cells
+                board->at(i)->render(ref);
+
+            }
+            ref.display();
+
 
         }
         

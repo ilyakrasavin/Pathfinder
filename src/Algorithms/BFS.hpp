@@ -264,7 +264,6 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
         // Render as Explored
         //
 
-
         // Queue is empty! Done
         if(children_queue.empty()){
             break;

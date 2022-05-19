@@ -148,7 +148,7 @@ int main()
                 // Pass the reference to the window
                 // Further Graph updates and rendering done within the algorithm
 
-                Graph graph(&boardCells);
+                Graph graph(&boardCells, window);
 
                 // bool SearchResult = BreadthFirstSearch(&graph, &window);
 
