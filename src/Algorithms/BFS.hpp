@@ -33,6 +33,10 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             return true;
         }
 
+        // if(currentNode->getCellRef()->checkIsWall()){
+        //     cout<<"I AM A WALL!!"<<endl;
+        // }
+
 
         shared_ptr<Node> nextRight = currentNode->getNextRight();
         
@@ -48,10 +52,12 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }
 
+                nextRight->setExplored();
                 cout<<"Pushed Next Right child into the queue"<<endl;
                 children_queue.push(nextRight);
 
                 // Render as Being Looked At
+                nextRight->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
 
             }
             else if(nextRight->isExplored()){
@@ -80,10 +86,12 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }
                 
+                next45up->setExplored();
                 cout<<"Pushed Next 45 Up child into the queue"<<endl;
                 children_queue.push(next45up);
 
                 // Render as Being Looked At
+                next45up->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
 
             }
             else if(next45up->isExplored()){
@@ -113,10 +121,12 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }    
 
+                nextUp->setExplored();
                 cout<<"Pushed Next Up child into the queue"<<endl;
                 children_queue.push(nextUp);
 
                 // Render as Being Looked At
+                nextUp->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
 
             }
             else if(nextUp->isExplored()){
@@ -145,10 +155,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }
 
+                prev45up->setExplored();
+
                 cout<<"Pushed Prev 45Up child into the queue"<<endl;
                 children_queue.push(prev45up);
 
                 // Render as Being Looked At
+                prev45up->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
 
             }
             else if(prev45up->isExplored()){
@@ -178,10 +191,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }    
 
+                prevLeft->setExplored();
                 cout<<"Pushed Prev Left child into the queue"<<endl;
                 children_queue.push(prevLeft);
 
                 // Render as Being Looked At
+                prevLeft->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+
 
             }
             else if(prevLeft->isExplored()){
@@ -212,10 +228,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }
 
+                prev45down->setExplored();
                 cout<<"Pushed Prev 45 Down child into the queue"<<endl;
                 children_queue.push(prev45down);
 
                 // Render as Being Looked At
+                prev45down->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+
 
             }
             else if(prev45down->isExplored()){
@@ -244,10 +263,14 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }      
 
+                nextDown->setExplored();
+
                 cout<<"Pushed Next Down child into the queue"<<endl;
                 children_queue.push(nextDown);
 
                 // Render as Being Looked At
+                nextDown->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+
 
             }
             else if(nextDown->isExplored()){
@@ -279,10 +302,14 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                     return true;
                 }
 
+                next45down->setExplored();
+                
                 cout<<"Pushed Next 45 Down child into the queue"<<endl;
                 children_queue.push(next45down);
 
                 // Render as Being Looked At
+                next45down->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+
 
             }
             else if(next45down->isExplored()){
@@ -300,24 +327,23 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
         // Mark current node as explored
         
-        if(!currentNode->isExplored())
-        {
-            explored.push_back(currentNode);
-            currentNode->setExplored();
-            currentNode->getCellRef()->setTexture("../assets-static/cell-start.jpg");
+        // if(!currentNode->isExplored())
+        // {
+        explored.push_back(currentNode);
+        currentNode->setExplored();
+        currentNode->getCellRef()->setTexture("../assets-static/cell-start.jpg");
 
-        }
+        // }
 
 
         cout<<"Nodes explored: "<<explored.size()<<endl;
 
-        // Render Explored
-
-        cout<<"Rendering Explored"<<endl;
-        for(int i = 0; i < explored.size(); i++){
-            explored[i]->getCellRef()->render(windowRef);
-            windowRef.display();
+        // Render the board
+        for(auto each: graph->nodeMatrix){
+            each->getCellRef()->render(windowRef);
         }
+        windowRef.display();
+
 
         // Queue is empty! Done
         if(children_queue.empty()){

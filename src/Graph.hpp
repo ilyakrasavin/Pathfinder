@@ -163,6 +163,9 @@ class Graph{
         void setStartIdx(int);
         shared_ptr<Node> getStartNode();
 
+        vector<shared_ptr<Node>> nodeMatrix;
+
+
         ~Graph();
 
     private:
@@ -173,7 +176,6 @@ class Graph{
         // Traversal References
         // Node* currentNode;
 
-        vector<shared_ptr<Node>> nodeMatrix;
 
         int startIdx;
 
@@ -194,6 +196,11 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int Star
         this->nodeMatrix.push_back(newNode);
 
         cout<<"Node "<<mapIdx<<" Created!"<<endl;
+        
+        if(newNode->isWall())
+            cout<<"Is is a WALL!"<<endl;
+        else if(newNode->isTarget())
+            cout<<"It is a TARGET!"<<endl;
 
     }
 

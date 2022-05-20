@@ -72,8 +72,8 @@ int main()
 
     int startIdx = 0;
 
-    bool depthFirstSearch = false;
-    bool breadthFirstSearch = false;
+    bool depthFirstSearch = true;
+    bool breadthFirstSearch = true;
 
 
     // Rendering Window Outer loop
@@ -111,6 +111,7 @@ int main()
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
                     boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-red.jpg", false, true, false, false);
+                    cout<<"Put a WALL @"<<cellIdx<<endl;
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isFinishSet){
                     boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-finish.jpg", true, false, false, false);
@@ -147,7 +148,7 @@ int main()
             cout<<"START INDEX IS: "<<startIdx<<endl;
 
 
-            if(isFinishSet){
+            if(isFinishSet && depthFirstSearch == true){
 
                 // Initialize the Graph and pass it to the algorithm
                 // Pass the reference to the window
@@ -156,8 +157,9 @@ int main()
                 Graph graph(&boardCells, window, startIdx);
                 bool SearchResult = BreadthFirstSearch(&graph, window);
 
+                depthFirstSearch = false;
 
-                return EXIT_SUCCESS;
+                // return EXIT_SUCCESS;
             }
 
         }
