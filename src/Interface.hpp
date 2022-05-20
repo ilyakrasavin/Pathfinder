@@ -60,7 +60,7 @@ class mapCell : public Sprite2DComponent{
             m_texture.loadFromFile(filepath);
             m_sprite.setTexture(m_texture);
 
-            m_sprite.setScale(0.2, 0.2);
+            m_sprite.setScale(0.05, 0.05);
 
             isTarget = isTgt;
             isWall = isWall;
@@ -80,7 +80,7 @@ class mapCell : public Sprite2DComponent{
         void setTexture(string filepath){
             m_texture.loadFromFile(filepath);
             m_sprite.setTexture(m_texture);
-            m_sprite.setScale(0.2, 0.2);
+            m_sprite.setScale(0.05, 0.05);
         }
 
 

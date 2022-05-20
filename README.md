@@ -1,3 +1,5 @@
+# WIP
+
 
 Compiling on Mac OS (SFML installed via Homebrew)
 

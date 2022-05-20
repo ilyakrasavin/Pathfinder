@@ -19,7 +19,7 @@ using namespace std;
 int main()
 {
     // Main Rendering Window 
-    sf::RenderWindow window(sf::VideoMode(2025, 2025), "Main Window!");
+    sf::RenderWindow window(sf::VideoMode(900, 900), "Main Window!");
     window.setFramerateLimit(60);
 
     // sf::RectangleShape cell(sf::Vector2f(60,60));
@@ -51,10 +51,10 @@ int main()
 
             boardCells.push_back(test);
 
-            k+=45;
+            k+=30;
         }
 
-        i+=45;
+        i+=30;
     }
 
 
@@ -70,10 +70,10 @@ int main()
     bool isStartSet = false;
     bool isFinishSet = false; // Run the algorithm on true
 
+    int startIdx = 0;
+
     bool depthFirstSearch = false;
     bool breadthFirstSearch = false;
-
-
 
 
     // Rendering Window Outer loop
@@ -106,7 +106,7 @@ int main()
                 cout<<yPos<<endl;
 
                 // Calculate the Cell index & replace
-                int cellIdx = (yPos/45) * 45 + xPos / 45;
+                int cellIdx = (yPos/30) * 30 + xPos / 30;
                 cout<<"Cell IDX is "<<cellIdx<<endl;
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
@@ -115,18 +115,20 @@ int main()
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isFinishSet){
                     boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-finish.jpg", true, false, false, false);
                     isFinishSet = true;
+                    cout<<"Finish is set at position: "<<cellIdx<<endl;
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && !isStartSet){
-                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-start.jpg", true, false, false, false);
+                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-start.jpg", false, false, true, false);
                     isStartSet = true;
+                    startIdx = cellIdx;
                 }
                 else{
                     continue;
                 }
 
 
-                boardCells[cellIdx]->SetPosition(xPos - xPos%45, yPos - yPos%45);
-                cout<<"Position set at "<<xPos - xPos%45<<" And :"<<yPos - yPos%45<<endl;
+                boardCells[cellIdx]->SetPosition(xPos - xPos%30, yPos - yPos%30);
+                cout<<"Position set at "<<xPos - xPos%30<<" And :"<<yPos - yPos%30<<endl;
 
             }
 
@@ -142,15 +144,17 @@ int main()
             window.draw(text);
             window.display();
 
+            cout<<"START INDEX IS: "<<startIdx<<endl;
+
+
             if(isFinishSet){
 
                 // Initialize the Graph and pass it to the algorithm
                 // Pass the reference to the window
                 // Further Graph updates and rendering done within the algorithm
 
-                Graph graph(&boardCells, window);
-
-                // bool SearchResult = BreadthFirstSearch(&graph, &window);
+                Graph graph(&boardCells, window, startIdx);
+                bool SearchResult = BreadthFirstSearch(&graph, window);
 
 
                 return EXIT_SUCCESS;

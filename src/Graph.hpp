@@ -18,6 +18,8 @@ class Node{
         // Default constructor
         Node(shared_ptr<mapCell> reference, int index, bool isStartIn, bool isWallIn, bool isExploredIn, bool isTargetIn){
 
+            this->cellRef = reference;
+
             isStartNode = isStartIn;
             isWallNode = isWallIn;
             isExploredNode = isExploredIn;
@@ -56,24 +58,24 @@ class Node{
          
 
         // Node Connection setters
-        void setNextRight(Node* nextRight){this->nextRight = nextRight;}
-        void setPrevLeft(Node* prevLeft){this->prevLeft = prevLeft;}
-        void setNextUp(Node* nextUp){this->nextUp = nextUp;}
-        void setNextDown(Node* nextDown){this->nextDown = nextDown;}
-        void setPrev45up(Node* prev45up){this->prev45up = prev45up;}
-        void setNext45up(Node* next45up){this->next45up = next45up;}
-        void setPrev45down(Node* prev45down){this->prev45down = prev45down;}
-        void setNext45down(Node* next45down){this->next45down = next45down;}
+        void setNextRight(shared_ptr<Node> nextRight){this->nextRight = nextRight;}
+        void setPrevLeft(shared_ptr<Node> prevLeft){this->prevLeft = prevLeft;}
+        void setNextUp(shared_ptr<Node> nextUp){this->nextUp = nextUp;}
+        void setNextDown(shared_ptr<Node> nextDown){this->nextDown = nextDown;}
+        void setPrev45up(shared_ptr<Node> prev45up){this->prev45up = prev45up;}
+        void setNext45up(shared_ptr<Node> next45up){this->next45up = next45up;}
+        void setPrev45down(shared_ptr<Node> prev45down){this->prev45down = prev45down;}
+        void setNext45down(shared_ptr<Node> next45down){this->next45down = next45down;}
 
         // Node connection getters
-        Node* getNextRight(){return nextRight;}
-        Node* getPrevLeft(){return prevLeft;}
-        Node* getNextUp(){return nextUp;}
-        Node* getNextDown(){return nextDown;}
-        Node* getPrev45up(){return prev45down;}
-        Node* getNext45up(){return next45up;}
-        Node* getPrev45down(){return prev45down;}
-        Node* getNext45down(){return next45down;}
+        shared_ptr<Node> getNextRight(){return nextRight;}
+        shared_ptr<Node> getPrevLeft(){return prevLeft;}
+        shared_ptr<Node> getNextUp(){return nextUp;}
+        shared_ptr<Node> getNextDown(){return nextDown;}
+        shared_ptr<Node> getPrev45up(){return prev45down;}
+        shared_ptr<Node> getNext45up(){return next45up;}
+        shared_ptr<Node> getPrev45down(){return prev45down;}
+        shared_ptr<Node> getNext45down(){return next45down;}
 
         // Attribute check
         bool isExplored(){return isExploredNode;}        
@@ -82,6 +84,8 @@ class Node{
         bool isTarget(){return isTargetNode;}
         int getIdx(){return mapIdx;}
 
+
+        shared_ptr<mapCell> getCellRef();
 
         // Attribure setters
         void setExplored(){isExploredNode = true;}
@@ -96,14 +100,14 @@ class Node{
         int mapIdx;
 
         // Neighboring Nodes
-        Node* nextRight;
-        Node* prevLeft;
-        Node* nextUp;
-        Node* nextDown;
-        Node* prev45up;
-        Node* next45up;
-        Node* prev45down;
-        Node* next45down;
+        shared_ptr<Node> nextRight;
+        shared_ptr<Node> prevLeft;
+        shared_ptr<Node> nextUp;
+        shared_ptr<Node> nextDown;
+        shared_ptr<Node> prev45up;
+        shared_ptr<Node> next45up;
+        shared_ptr<Node> prev45down;
+        shared_ptr<Node> next45down;
 
         // Cell Attributes copy
         bool isStartNode;
@@ -152,27 +156,32 @@ class Graph{
 
         // Initialization Pass -> Connection Pass
         // REMOVE WINDOW REFERENCE LATER
-        Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref);
-        Node* getStartNode();
-        // void moveCurrent();
-    
+        Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int startIdx);
+        int getMatrixSize();
+
+        void setStartNode(shared_ptr<Node>);
+        void setStartIdx(int);
+        shared_ptr<Node> getStartNode();
+
         ~Graph();
 
     private:
         // Essential References
         // vector<shared_ptr<mapCell>>* boardCells;
-        Node* StartNode;
+        shared_ptr<Node> StartNode;
 
         // Traversal References
         // Node* currentNode;
 
-        vector<Node*> nodeMatrix;
+        vector<shared_ptr<Node>> nodeMatrix;
+
+        int startIdx;
 
 };
 
 
 // REMOVE WINDOW REFERENCE LATER
-Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref){
+Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int StartIdx){
 
     // Traverse the board and create nodes
 
@@ -180,7 +189,7 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref){
 
         shared_ptr<mapCell> cell = board->at(mapIdx);
 
-        Node* newNode = new Node(cell, mapIdx, cell->checkIsStart(), cell->checkIsWall(), cell->checkIsExplored(), cell->checkIsTarget());
+        shared_ptr<Node> newNode = make_shared<Node>(cell, mapIdx, cell->checkIsStart(), cell->checkIsWall(), cell->checkIsExplored(), cell->checkIsTarget());
 
         this->nodeMatrix.push_back(newNode);
 
@@ -190,151 +199,186 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref){
 
     int matrixSize = this->nodeMatrix.size();
 
-    // TODO
+    this->setStartNode(this->nodeMatrix.at(StartIdx));
+
+
     // Calculations below determine the position/possible connections of a Node
     for(int nodeMapIdx = 0; nodeMapIdx < matrixSize; nodeMapIdx++){
 
-        // + RENDER FOR TESTING PURPOSES
+        cout<<"Node at Index: "<<nodeMapIdx<<endl;
+
+        // if(this->nodeMatrix[nodeMapIdx].get()->isStart()){
+
+        //     if(startCount > 1){
+        //         cout<<"!!! FATAL. MULTIPLE START NODES !!!"<<endl;
+        //     }
+
+        //     cout<<"Start Node FOUND At Index :"<<nodeMatrix[nodeMapIdx].get()->getIdx()<<endl;
+        //     this->setStartNode(nodeMatrix[nodeMapIdx]);
+        //     startCount++;
+        // }
 
 
         // Top Left Node
-        if(nodeMapIdx % 45 == 0 && (nodeMapIdx == 0)){
+        if(nodeMapIdx % 30 == 0 && (nodeMapIdx == 0)){
             cout<<"Top left node"<<endl;
 
-            ref.clear();
-            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+            // Connect to accessible neighbouring nodes
+            this->nodeMatrix[nodeMapIdx].get()->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
+            this->nodeMatrix[nodeMapIdx].get()->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
+            this->nodeMatrix[nodeMapIdx].get()->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
 
-            for(int i = 0; i < matrixSize; i ++){
-    
-                // Draw Board Cells
-                board->at(i)->render(ref);
+            continue;
 
-            }
-            ref.display();
-
-
-            // Connect
         }
 
         // Top Right Node
-        else if(nodeMapIdx % 45 == 44 && nodeMapIdx == 44){
+        else if(nodeMapIdx % 30 == 29 && nodeMapIdx == 29){
             cout<<"Top Right node"<<endl;
 
-            ref.clear();
-            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+            this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
 
-            for(int i = 0; i < matrixSize; i ++){
-    
-                // Draw Board Cells
-                board->at(i)->render(ref);
-
-            }
-            ref.display();
-
+            continue;
 
         }
 
         // Bottom Left Node
-        else if(nodeMapIdx % 45 == 0 && nodeMapIdx + 45 > matrixSize){
+        else if(nodeMapIdx % 30 == 0 && nodeMapIdx + 30 > matrixSize){
 
-            ref.clear();
-            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+            cout<<"Bottom Left Node"<<endl;
 
-            for(int i = 0; i < matrixSize; i ++){
-    
-                // Draw Board Cells
-                board->at(i)->render(ref);
+            this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
 
-            }
-            ref.display();
 
+            continue;
 
         }
 
         // Bottom Right Node
-        else if(nodeMapIdx % 45 == 44 && (nodeMapIdx + 1 > matrixSize)){
+        else if(nodeMapIdx % 30 == 29 && (nodeMapIdx + 1 >= matrixSize)){
 
-            ref.clear();
-            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+            cout<<"Bottom Right Node"<<endl;
 
-            for(int i = 0; i < matrixSize; i ++){
-    
-                // Draw Board Cells
-                board->at(i)->render(ref);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
 
-            }
-            ref.display();
 
+            continue;
 
         }
 
         // Left Edge Node
-        else if(nodeMapIdx % 45 == 0){
+        else if(nodeMapIdx % 30 == 0 && nodeMapIdx + 30 < matrixSize){
 
-            cout<<"Left Edge node"<<endl;
+            cout<<"Left Edge Node"<<endl;
+
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
+            this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
+            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
 
 
-            ref.clear();
-            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
-
-            for(int i = 0; i < matrixSize; i ++){
-    
-                // Draw Board Cells
-                board->at(i)->render(ref);
-
-            }
-            ref.display();
-
+            continue;
 
         }
 
 
         // Right Edge Node
-        else if(nodeMapIdx % 45 == 44){
+        else if(nodeMapIdx % 30 == 29 && nodeMapIdx + 30 < matrixSize){
 
-            ref.clear();
-            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+            cout<<"Right Edge Node"<<endl;
 
-            for(int i = 0; i < matrixSize; i ++){
-    
-                // Draw Board Cells
-                board->at(i)->render(ref);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
 
-            }
-            ref.display();
+
+            continue;
 
         }
+
+
+        // Top Edge Node
+        else if(nodeMapIdx > 0 && nodeMapIdx < 29){
+            cout<<"Top edge Node"<<endl;
+
+            this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
+            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
+
+
+            continue;
+
+        }
+
+        else if(nodeMapIdx > getMatrixSize() - 31 && nodeMapIdx < getMatrixSize() - 1){
+            cout<<"Bottom edge node"<<endl;
+
+            this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
+
+
+
+            continue;
+
+        }
+
 
         // Middle node
         else{
 
-            ref.clear();
-            board->at(nodeMapIdx)->setTexture("../assets-static/cell-red.jpg");
+            cout<<"Middle Node"<<endl;
 
-            for(int i = 0; i < matrixSize; i ++){
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
+            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
+            this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx +1]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
 
-                // Render and Draw all Board Cells
-                board->at(i)->render(ref);
-
-            }
-            ref.display();
-
-
+            continue;
         }
         
     }
 
 
+};
 
+
+void Graph::setStartNode(shared_ptr<Node> startNode){
+    this->StartNode = startNode;
 }
 
+shared_ptr<Node> Graph::getStartNode(){return this->StartNode;}
 
-Node* Graph::getStartNode(){return this->StartNode;}
+int Graph::getMatrixSize(){return this->nodeMatrix.size();}
+
+
+shared_ptr<mapCell> Node::getCellRef(){return this->cellRef;}
+
+void Graph::setStartIdx(int idx){
+    this->startIdx = idx;
+}
 
 Graph::~Graph(){
 
     for(auto node: nodeMatrix){
-        delete node;
+        node = nullptr;
     }
 }
 

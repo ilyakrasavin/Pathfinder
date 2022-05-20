@@ -3,17 +3,19 @@
 #include <queue>
 #include <iostream>
 
-bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
+bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
 // Run the algorithm AND perform rendering within the algoritm
 
 // ASSURE no retraction is happenning (No backwards exporation -> Nodes marked visited)
 
-    // Begin with the Start Node
-    Node* currentNode = graph->getStartNode();
+    cout<<"Entered BFS"<<endl;
 
-    vector<Node*> explored;
-    queue<Node*> children_queue;
+    // Begin with the Start Node
+    shared_ptr<Node> currentNode = graph->getStartNode();
+
+    vector<shared_ptr<Node>> explored;
+    queue<shared_ptr<Node>> children_queue;
 
     // Push the Non-explored children of a node into a queue (if exist)
     // Pop the first child off the queue -> Make it a current node -> Add to explored array
@@ -21,13 +23,22 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
     // Pop the second child of a root off the queue -> Make current ... -> Add to explored array
     // ...
 
+    cout<<"BFS Started with node at position: "<<currentNode->getIdx()<<endl;
 
     while(true){
 
 
-        Node* nextRight = currentNode->getNextRight();
+        if(currentNode->isTarget()){
+            cout<<"target found @ "<<currentNode->getIdx()<<endl;
+            return true;
+        }
+
+
+        shared_ptr<Node> nextRight = currentNode->getNextRight();
+        
         // Adjacent Node Exists
         if(nextRight != nullptr){
+
             // Adjacent node not previously explored & is not a Wall
             if(!nextRight->isExplored() && !nextRight->isWall()){
                 cout<<"Pushed Next Right child into the queue"<<endl;
@@ -54,37 +65,37 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
 
 
 
-        Node* prevLeft = currentNode->getPrevLeft();
+        shared_ptr<Node> next45up = currentNode->getNext45up();
         // Adjacent Node Exists
-        if(prevLeft != nullptr){
+        if(next45up != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!prevLeft->isExplored() && !prevLeft->isWall()){
-                cout<<"Pushed Prev Left child into the queue"<<endl;
-                children_queue.push(prevLeft);
+            if(!next45up->isExplored() && !next45up->isWall()){
+                cout<<"Pushed Next 45 Up child into the queue"<<endl;
+                children_queue.push(next45up);
 
                 // Render as Being Looked At
 
             }
-            else if(prevLeft->isExplored()){
-                cout<<"Prev Left Child already explored"<<endl;
+            else if(next45up->isExplored()){
+                cout<<"Next 45 Up Child already explored"<<endl;
             }
-            else if(prevLeft->isWall()){
-                cout<<"Prev Left Cell is an obstacle, can not explore!"<<endl;
+            else if(next45up->isWall()){
+                cout<<"Next 45 Up Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(prevLeft->isTarget()){
+            else if(next45up->isTarget()){
                 cout<<"Target Found!"<<endl;
                 // Render as Target
                 return true;
-            }            
-            
+            }
         }
         else{
-            cout<<"Prev Left Cell does not exist!"<<endl;
+            cout<<"Next 45 Up Cell does not exist!"<<endl;
         }
 
 
 
-        Node* nextUp = currentNode->getNextUp();
+
+        shared_ptr<Node> nextUp = currentNode->getNextUp();
         // Adjacent Node Exists
         if(nextUp != nullptr){
             // Adjacent node not previously explored & is not a Wall
@@ -113,36 +124,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
 
 
 
-        Node* nextDown = currentNode->getNextDown();
-        // Adjacent Node Exists
-        if(nextDown != nullptr){
-            // Adjacent node not previously explored & is not a Wall
-            if(!nextDown->isExplored() && !nextDown->isWall()){
-                cout<<"Pushed Next Down child into the queue"<<endl;
-                children_queue.push(nextDown);
-
-                // Render as Being Looked At
-
-            }
-            else if(nextDown->isExplored()){
-                cout<<"Next Down Child already explored"<<endl;
-            }
-            else if(nextDown->isWall()){
-                cout<<"Next Down Cell is an obstacle, can not explore!"<<endl;
-            }
-            else if(nextDown->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }            
-        }
-        else{
-            cout<<"Next Down Cell does not exist!"<<endl;
-        }
-
-
-
-        Node* prev45up = currentNode->getPrev45up();
+        shared_ptr<Node> prev45up = currentNode->getPrev45up();
         // Adjacent Node Exists
         if(prev45up != nullptr){
             // Adjacent node not previously explored & is not a Wall
@@ -172,36 +154,39 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
 
 
 
-        Node* next45up = currentNode->getNext45up();
+        shared_ptr<Node> prevLeft = currentNode->getPrevLeft();
         // Adjacent Node Exists
-        if(next45up != nullptr){
+        if(prevLeft != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!next45up->isExplored() && !next45up->isWall()){
-                cout<<"Pushed Next 45 Up child into the queue"<<endl;
-                children_queue.push(next45up);
+            if(!prevLeft->isExplored() && !prevLeft->isWall()){
+                cout<<"Pushed Prev Left child into the queue"<<endl;
+                children_queue.push(prevLeft);
 
                 // Render as Being Looked At
 
             }
-            else if(next45up->isExplored()){
-                cout<<"Next 45 Up Child already explored"<<endl;
+            else if(prevLeft->isExplored()){
+                cout<<"Prev Left Child already explored"<<endl;
             }
-            else if(next45up->isWall()){
-                cout<<"Next 45 Up Cell is an obstacle, can not explore!"<<endl;
+            else if(prevLeft->isWall()){
+                cout<<"Prev Left Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(next45up->isTarget()){
+            else if(prevLeft->isTarget()){
                 cout<<"Target Found!"<<endl;
                 // Render as Target
                 return true;
-            }
+            }            
+            
         }
         else{
-            cout<<"Next 45 Up Cell does not exist!"<<endl;
+            cout<<"Prev Left Cell does not exist!"<<endl;
         }
 
 
 
-        Node* prev45down = currentNode->getPrev45down();
+
+
+        shared_ptr<Node> prev45down = currentNode->getPrev45down();
         // Adjacent Node Exists
         if(prev45down != nullptr){
             // Adjacent node not previously explored & is not a Wall
@@ -229,7 +214,42 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
         }
 
 
-        Node* next45down = currentNode->getNext45down();
+
+
+
+        shared_ptr<Node> nextDown = currentNode->getNextDown();
+        // Adjacent Node Exists
+        if(nextDown != nullptr){
+            // Adjacent node not previously explored & is not a Wall
+            if(!nextDown->isExplored() && !nextDown->isWall()){
+                cout<<"Pushed Next Down child into the queue"<<endl;
+                children_queue.push(nextDown);
+
+                // Render as Being Looked At
+
+            }
+            else if(nextDown->isExplored()){
+                cout<<"Next Down Child already explored"<<endl;
+            }
+            else if(nextDown->isWall()){
+                cout<<"Next Down Cell is an obstacle, can not explore!"<<endl;
+            }
+            else if(nextDown->isTarget()){
+                cout<<"Target Found!"<<endl;
+                // Render as Target
+                return true;
+            }            
+        }
+        else{
+            cout<<"Next Down Cell does not exist!"<<endl;
+        }
+
+
+
+
+
+
+        shared_ptr<Node> next45down = currentNode->getNext45down();
         // Adjacent Node Exists
         if(next45down != nullptr){
             // Adjacent node not previously explored & is not a Wall
@@ -257,12 +277,26 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
         }
 
 
-
         // Mark current node as explored
-        explored.push_back(currentNode);
         
-        // Render as Explored
-        //
+        if(!currentNode->isExplored())
+        {
+            explored.push_back(currentNode);
+            currentNode->setExplored();
+            currentNode->getCellRef()->setTexture("../assets-static/cell-start.jpg");
+
+        }
+
+
+        cout<<"Nodes explored: "<<explored.size()<<endl;
+
+        // Render Explored
+
+        cout<<"Rendering Explored"<<endl;
+        for(int i = 0; i < explored.size(); i++){
+            explored[i]->getCellRef()->render(windowRef);
+            windowRef.display();
+        }
 
         // Queue is empty! Done
         if(children_queue.empty()){
@@ -273,8 +307,9 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow* windowRef){
         currentNode = children_queue.front();
         children_queue.pop();
 
-    }
+        cout<<"Elements in the Children Queue: "<<children_queue.size()<<endl;
 
+    }
 
 
     return false;
