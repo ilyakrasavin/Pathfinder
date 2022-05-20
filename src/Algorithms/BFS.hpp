@@ -41,6 +41,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
             // Adjacent node not previously explored & is not a Wall
             if(!nextRight->isExplored() && !nextRight->isWall()){
+
+                if(nextRight->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }
+
                 cout<<"Pushed Next Right child into the queue"<<endl;
                 children_queue.push(nextRight);
 
@@ -53,11 +60,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(nextRight->isWall()){
                 cout<<"Next Right Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(nextRight->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }
+
         }
         else{
             cout<<"Next Right Cell does not exist!"<<endl;
@@ -70,6 +73,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(next45up != nullptr){
             // Adjacent node not previously explored & is not a Wall
             if(!next45up->isExplored() && !next45up->isWall()){
+
+                if(next45up->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }
+                
                 cout<<"Pushed Next 45 Up child into the queue"<<endl;
                 children_queue.push(next45up);
 
@@ -82,11 +92,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(next45up->isWall()){
                 cout<<"Next 45 Up Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(next45up->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }
+
         }
         else{
             cout<<"Next 45 Up Cell does not exist!"<<endl;
@@ -100,6 +106,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(nextUp != nullptr){
             // Adjacent node not previously explored & is not a Wall
             if(!nextUp->isExplored() && !nextUp->isWall()){
+
+                if(nextUp->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }    
+
                 cout<<"Pushed Next Up child into the queue"<<endl;
                 children_queue.push(nextUp);
 
@@ -112,11 +125,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(nextUp->isWall()){
                 cout<<"Next Up Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(nextUp->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }           
+       
         }
         else{
             cout<<"Next Up Cell does not exist!"<<endl;
@@ -129,6 +138,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(prev45up != nullptr){
             // Adjacent node not previously explored & is not a Wall
             if(!prev45up->isExplored() && !prev45up->isWall()){
+
+                if(prev45up->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }
+
                 cout<<"Pushed Prev 45Up child into the queue"<<endl;
                 children_queue.push(prev45up);
 
@@ -141,11 +157,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(prev45up->isWall()){
                 cout<<"Prev 45Up Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(prev45up->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }
+
         }
         else{
             cout<<"Prev 45Up Cell does not exist!"<<endl;
@@ -159,6 +171,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(prevLeft != nullptr){
             // Adjacent node not previously explored & is not a Wall
             if(!prevLeft->isExplored() && !prevLeft->isWall()){
+
+                if(prevLeft->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }    
+
                 cout<<"Pushed Prev Left child into the queue"<<endl;
                 children_queue.push(prevLeft);
 
@@ -171,11 +190,6 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(prevLeft->isWall()){
                 cout<<"Prev Left Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(prevLeft->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }            
             
         }
         else{
@@ -191,6 +205,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(prev45down != nullptr){
             // Adjacent node not previously explored & is not a Wall
             if(!prev45down->isExplored() && !prev45down->isWall()){
+
+                if(prev45down->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }
+
                 cout<<"Pushed Prev 45 Down child into the queue"<<endl;
                 children_queue.push(prev45down);
 
@@ -203,17 +224,11 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(prev45down->isWall()){
                 cout<<"Prev 45 Down Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(prev45down->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }
+
         }
         else{
             cout<<"Prev 45 Down Cell does not exist!"<<endl;
         }
-
-
 
 
 
@@ -222,6 +237,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(nextDown != nullptr){
             // Adjacent node not previously explored & is not a Wall
             if(!nextDown->isExplored() && !nextDown->isWall()){
+
+                if(nextDown->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }      
+
                 cout<<"Pushed Next Down child into the queue"<<endl;
                 children_queue.push(nextDown);
 
@@ -234,11 +256,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(nextDown->isWall()){
                 cout<<"Next Down Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(nextDown->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }            
+      
         }
         else{
             cout<<"Next Down Cell does not exist!"<<endl;
@@ -254,6 +272,13 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(next45down != nullptr){
             // Adjacent node not previously explored & is not a Wall
             if(!next45down->isExplored() && !next45down->isWall()){
+
+                if(next45down->isTarget()){
+                    cout<<"Target Found!"<<endl;
+                    // Render as Target
+                    return true;
+                }
+
                 cout<<"Pushed Next 45 Down child into the queue"<<endl;
                 children_queue.push(next45down);
 
@@ -266,11 +291,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(next45down->isWall()){
                 cout<<"Next 45 Down Cell is an obstacle, can not explore!"<<endl;
             }
-            else if(next45down->isTarget()){
-                cout<<"Target Found!"<<endl;
-                // Render as Target
-                return true;
-            }
+
         }
         else{
             cout<<"Next 45 Down Cell does not exist!"<<endl;
