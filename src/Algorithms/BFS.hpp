@@ -303,7 +303,6 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 }
 
                 next45down->setExplored();
-                
                 cout<<"Pushed Next 45 Down child into the queue"<<endl;
                 children_queue.push(next45down);
 

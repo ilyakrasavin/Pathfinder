@@ -94,6 +94,7 @@ class mapCell : public Sprite2DComponent{
 
 
     private:
+    
         sf::Texture m_texture;
         sf::Sprite m_sprite;
 

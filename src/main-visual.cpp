@@ -14,7 +14,7 @@ using namespace std;
 
 
 #include "Algorithms/BFS.hpp"
-
+#include "Algorithms/DFS.hpp"
 
 int main()
 {
@@ -40,7 +40,8 @@ int main()
     vector<shared_ptr<mapCell>> boardCells;
 
     // Initialize the board of cells
-
+    
+    // Set the 
 
     for(int i = 0; i < window.getSize().y;){
 
@@ -72,8 +73,8 @@ int main()
 
     int startIdx = 0;
 
-    bool depthFirstSearch = true;
     bool breadthFirstSearch = true;
+
 
 
     // Rendering Window Outer loop
@@ -148,19 +149,50 @@ int main()
             cout<<"START INDEX IS: "<<startIdx<<endl;
 
 
-            if(isFinishSet && depthFirstSearch == true){
+            if(isFinishSet == true && breadthFirstSearch == true){
 
                 // Initialize the Graph and pass it to the algorithm
                 // Pass the reference to the window
                 // Further Graph updates and rendering done within the algorithm
 
                 Graph graph(&boardCells, window, startIdx);
-                bool SearchResult = BreadthFirstSearch(&graph, window);
+                bool SearchResult = DepthFirstSearch(&graph, window);
 
-                depthFirstSearch = false;
+                breadthFirstSearch = false;
 
                 // return EXIT_SUCCESS;
             }
+
+            if(breadthFirstSearch == false){
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)){
+                    breadthFirstSearch = true;
+
+                    for(int i = 0; i < window.getSize().y;){
+
+                     for(int k = 0; k < window.getSize().x;){
+
+                        shared_ptr<mapCell> test= make_shared<mapCell>("../assets-static/cell.jpg", false, false, false, false);
+                        test->SetPosition(k, i);
+
+                        boardCells.push_back(test);
+
+                        k+=30;
+                        }
+
+                        i+=30;
+                    }
+
+
+                    isStartSet = false;
+                    isFinishSet = false;
+
+                    break;
+                }
+
+
+            }
+
+
 
         }
 
