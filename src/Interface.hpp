@@ -25,7 +25,7 @@ class Sprite2DComponent : public IComponent{
             m_texture.loadFromFile(filepath);
             m_sprite.setTexture(m_texture);
 
-            m_sprite.setScale(0.2, 0.2);
+            m_sprite.setScale(0.08, 0.08);
         }
 
         virtual void SetPosition(float x, float y) override{
@@ -60,7 +60,7 @@ class mapCell : public Sprite2DComponent{
             m_texture.loadFromFile(filepath);
             m_sprite.setTexture(m_texture);
 
-            m_sprite.setScale(0.05, 0.05);
+            m_sprite.setScale(0.08, 0.08);
 
             isTarget = isTgt;
             isWall = isWall;
@@ -80,9 +80,16 @@ class mapCell : public Sprite2DComponent{
         void setTexture(string filepath){
             m_texture.loadFromFile(filepath);
             m_sprite.setTexture(m_texture);
-            m_sprite.setScale(0.05, 0.05);
+            m_sprite.setScale(0.08, 0.08);
         }
 
+
+        void resetAttributes(){
+            this->isTarget = false;
+            this->isWall = false;
+            this->isExplored = false;
+            this->isStart = false;
+        }
 
         bool checkIsTarget(){return isTarget;}
         bool checkIsWall(){return isWall;}

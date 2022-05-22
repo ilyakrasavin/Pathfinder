@@ -22,11 +22,6 @@ int main()
     sf::RenderWindow window(sf::VideoMode(900, 900), "Main Window!");
     window.setFramerateLimit(60);
 
-    // sf::RectangleShape cell(sf::Vector2f(60,60));
-    // cell.setPosition(sf::Vector2f(0, 0));
-    // cell.setFillColor(sf::Color::Black);
-    // cell.move(60, 60);
-
 
     // Mouse Release Check
     bool mouseReleased = false;
@@ -40,8 +35,6 @@ int main()
     vector<shared_ptr<mapCell>> boardCells;
 
     // Initialize the board of cells
-    
-    // Set the 
 
     for(int i = 0; i < window.getSize().y;){
 
@@ -60,12 +53,12 @@ int main()
 
 
     // Set up fonts
-    sf::Font font;
-    if (!font.loadFromFile("../assets-static/Raleway-Regular.ttf"))
-        return EXIT_FAILURE;
-    sf::Text text("Hello SFML", font, 50);
-    text.setColor(sf::Color::Blue);
-    text.setPosition(sf::Vector2f(20, 50));
+    // sf::Font font;
+    // if (!font.loadFromFile("../assets-static/Raleway-Regular.ttf"))
+    //     return EXIT_FAILURE;
+    // sf::Text text("Hello SFML", font, 50);
+    // text.setColor(sf::Color::Blue);
+    // text.setPosition(sf::Vector2f(20, 50));
 
 
     bool isStartSet = false;
@@ -94,7 +87,7 @@ int main()
             cout<<"FPS: "<<fps<<endl;
 
             // Some event handling examples
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
                 window.close();
 
 
@@ -143,7 +136,7 @@ int main()
                 boardCells[i]->render(window);
             }
 
-            window.draw(text);
+            // window.draw(text);
             window.display();
 
             cout<<"START INDEX IS: "<<startIdx<<endl;
@@ -167,21 +160,12 @@ int main()
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)){
                     breadthFirstSearch = true;
 
-                    for(int i = 0; i < window.getSize().y;){
-
-                     for(int k = 0; k < window.getSize().x;){
-
-                        shared_ptr<mapCell> test= make_shared<mapCell>("../assets-static/cell.jpg", false, false, false, false);
-                        test->SetPosition(k, i);
-
-                        boardCells.push_back(test);
-
-                        k+=30;
-                        }
-
-                        i+=30;
+                    for(int i = 0; i < boardCells.size(); i++){
+                        boardCells[i]->resetAttributes();
+                        boardCells[i]->setTexture("../assets-static/cell.jpg");
+                        boardCells[i]->render(window);
                     }
-
+                    window.display();
 
                     isStartSet = false;
                     isFinishSet = false;
@@ -189,9 +173,7 @@ int main()
                     break;
                 }
 
-
             }
-
 
 
         }

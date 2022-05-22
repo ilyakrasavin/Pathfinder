@@ -43,14 +43,6 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             return true;
         }
 
-        // shared_ptr<Node> nextRight = temp->getNextRight();
-        // shared_ptr<Node> next45up = temp->getNext45up();
-        // shared_ptr<Node> nextUp = temp->getNextUp();
-        // shared_ptr<Node> prev45up = temp->getPrev45up();
-        // shared_ptr<Node> prevLeft = temp->getPrevLeft();
-        // shared_ptr<Node> prev45down = temp->getPrev45down();
-        // shared_ptr<Node> nextDown = temp->getNextDown();
-        // shared_ptr<Node> next45down = temp->getNext45down();
 
         vector<shared_ptr<Node>> adjacent;
         adjacent.push_back(temp->getNextRight());
@@ -64,7 +56,6 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
 
         int traversedCount = 0;
-
 
         while(traversedCount < 7){
 
