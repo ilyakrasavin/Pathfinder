@@ -3,12 +3,19 @@
 #include <stack>
 #include <iostream>
 
+#include <random>
+
 bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
     shared_ptr<Node> startNode = graph->getStartNode();
     stack<shared_ptr<Node>> toExplore;
 
     toExplore.push(startNode);
+
+    random_device randomNum;
+
+
+    // Randomize the branch choice
 
     while(!toExplore.empty()){
 
@@ -36,46 +43,42 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             return true;
         }
 
-        shared_ptr<Node> nextRight = temp->getNextRight();
-        if(nextRight != nullptr && !nextRight->isExplored()){
-            toExplore.push(nextRight);
+        // shared_ptr<Node> nextRight = temp->getNextRight();
+        // shared_ptr<Node> next45up = temp->getNext45up();
+        // shared_ptr<Node> nextUp = temp->getNextUp();
+        // shared_ptr<Node> prev45up = temp->getPrev45up();
+        // shared_ptr<Node> prevLeft = temp->getPrevLeft();
+        // shared_ptr<Node> prev45down = temp->getPrev45down();
+        // shared_ptr<Node> nextDown = temp->getNextDown();
+        // shared_ptr<Node> next45down = temp->getNext45down();
+
+        vector<shared_ptr<Node>> adjacent;
+        adjacent.push_back(temp->getNextRight());
+        adjacent.push_back(temp->getNext45up());
+        adjacent.push_back(temp->getNextUp());
+        adjacent.push_back(temp->getPrev45up());
+        adjacent.push_back(temp->getPrevLeft());
+        adjacent.push_back(temp->getPrev45down());
+        adjacent.push_back(temp->getNextDown());
+        adjacent.push_back(temp->getNext45down());
+
+
+        int traversedCount = 0;
+
+
+        while(traversedCount < 7){
+
+            int randomIdx = randomNum() % (7 - traversedCount);
+            
+            if(adjacent[randomIdx] != nullptr && !adjacent[randomIdx]->isExplored()){
+                toExplore.push(adjacent[randomIdx]);
+                adjacent[randomIdx] = nullptr;
+            }
+
+            traversedCount++;
+
         }
 
-        shared_ptr<Node> next45up = temp->getNext45up();
-        if(next45up != nullptr && !next45up->isExplored()){
-            toExplore.push(next45up);
-        }
-
-        
-        shared_ptr<Node> nextUp = temp->getNextUp();
-        if(nextUp != nullptr && !nextUp->isExplored()){
-            toExplore.push(nextUp);
-        }
-
-        shared_ptr<Node> prev45up = temp->getPrev45up();
-        if(prev45up != nullptr && !prev45up->isExplored()){
-            toExplore.push(prev45up);
-        }
-
-        shared_ptr<Node> prevLeft = temp->getPrevLeft();
-        if(prevLeft != nullptr && !prevLeft->isExplored()){
-            toExplore.push(prevLeft);
-        }
-
-        shared_ptr<Node> prev45down = temp->getPrev45down();
-        if(prev45down != nullptr && !prev45down->isExplored()){
-            toExplore.push(prev45down);
-        }
-
-        shared_ptr<Node> nextDown = temp->getNextDown();
-        if(nextDown != nullptr && !nextDown->isExplored()){
-            toExplore.push(nextDown);
-        }
-
-        shared_ptr<Node> next45down = temp->getNext45down();
-        if(next45down != nullptr && !next45down->isExplored()){
-            toExplore.push(next45down);
-        }
 
 
     }
