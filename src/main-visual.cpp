@@ -19,7 +19,7 @@ using namespace std;
 int main()
 {
     // Main Rendering Window 
-    sf::RenderWindow window(sf::VideoMode(900, 900), "Main Window!");
+    sf::RenderWindow window(sf::VideoMode(1600, 1600), "Main Window!");
     window.setFramerateLimit(60);
 
 
@@ -40,15 +40,15 @@ int main()
 
         for(int k = 0; k < window.getSize().x;){
 
-            shared_ptr<mapCell> test= make_shared<mapCell>("../assets-static/cell.jpg", false, false, false, false);
+            shared_ptr<mapCell> test= make_shared<mapCell>("../assets-static/node-empty.jpg", false, false, false, false);
             test->SetPosition(k, i);
 
             boardCells.push_back(test);
 
-            k+=30;
+            k+=80;
         }
 
-        i+=30;
+        i+=80;
     }
 
 
@@ -67,7 +67,6 @@ int main()
     int startIdx = 0;
 
     bool breadthFirstSearch = true;
-
 
 
     // Rendering Window Outer loop
@@ -100,20 +99,20 @@ int main()
                 cout<<yPos<<endl;
 
                 // Calculate the Cell index & replace
-                int cellIdx = (yPos/30) * 30 + xPos / 30;
+                int cellIdx = (yPos/80) * 20 + xPos / 80;
                 cout<<"Cell IDX is "<<cellIdx<<endl;
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
-                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-red.jpg", false, true, false, false);
+                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/node-wall.jpg", false, true, false, false);
                     cout<<"Put a WALL @"<<cellIdx<<endl;
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isFinishSet){
-                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-finish.jpg", true, false, false, false);
+                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/node-finish.jpg", true, false, false, false);
                     isFinishSet = true;
                     cout<<"Finish is set at position: "<<cellIdx<<endl;
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && !isStartSet){
-                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/cell-start.jpg", false, false, true, false);
+                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/node-start.jpg", false, false, true, false);
                     isStartSet = true;
                     startIdx = cellIdx;
                 }
@@ -122,8 +121,8 @@ int main()
                 }
 
 
-                boardCells[cellIdx]->SetPosition(xPos - xPos%30, yPos - yPos%30);
-                cout<<"Position set at "<<xPos - xPos%30<<" And :"<<yPos - yPos%30<<endl;
+                boardCells[cellIdx]->SetPosition(xPos - xPos%80, yPos - yPos%80);
+                cout<<"Position set at "<<xPos - xPos%80<<" And :"<<yPos - yPos%80<<endl;
 
             }
 
@@ -148,7 +147,7 @@ int main()
                 // Pass the reference to the window
                 // Further Graph updates and rendering done within the algorithm
 
-                Graph graph(&boardCells, window, startIdx);
+                Graph graph(&boardCells, window, startIdx, 20);
                 bool SearchResult = DepthFirstSearch(&graph, window);
 
                 breadthFirstSearch = false;
@@ -162,7 +161,7 @@ int main()
 
                     for(int i = 0; i < boardCells.size(); i++){
                         boardCells[i]->resetAttributes();
-                        boardCells[i]->setTexture("../assets-static/cell.jpg");
+                        boardCells[i]->setTexture("../assets-static/node-empty.jpg");
                         boardCells[i]->render(window);
                     }
                     window.display();
@@ -174,6 +173,8 @@ int main()
                 }
 
             }
+
+
 
 
         }

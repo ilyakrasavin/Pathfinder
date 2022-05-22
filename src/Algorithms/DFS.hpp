@@ -28,7 +28,7 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(!temp->isExplored()){
             
             temp->setExplored();
-            temp->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+            temp->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
         }
 

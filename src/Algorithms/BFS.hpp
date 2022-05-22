@@ -57,7 +57,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(nextRight);
 
                 // Render as Being Looked At
-                nextRight->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                nextRight->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
             }
             else if(nextRight->isExplored()){
@@ -91,7 +91,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(next45up);
 
                 // Render as Being Looked At
-                next45up->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                next45up->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
             }
             else if(next45up->isExplored()){
@@ -126,7 +126,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(nextUp);
 
                 // Render as Being Looked At
-                nextUp->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                nextUp->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
             }
             else if(nextUp->isExplored()){
@@ -161,7 +161,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(prev45up);
 
                 // Render as Being Looked At
-                prev45up->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                prev45up->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
             }
             else if(prev45up->isExplored()){
@@ -196,7 +196,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(prevLeft);
 
                 // Render as Being Looked At
-                prevLeft->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                prevLeft->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
 
             }
@@ -233,7 +233,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(prev45down);
 
                 // Render as Being Looked At
-                prev45down->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                prev45down->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
 
             }
@@ -269,7 +269,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(nextDown);
 
                 // Render as Being Looked At
-                nextDown->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                nextDown->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
 
             }
@@ -307,7 +307,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
                 children_queue.push(next45down);
 
                 // Render as Being Looked At
-                next45down->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+                next45down->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
 
             }
@@ -330,7 +330,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         // {
         explored.push_back(currentNode);
         currentNode->setExplored();
-        currentNode->getCellRef()->setTexture("../assets-static/cell-start.jpg");
+        currentNode->getCellRef()->setTexture("../assets-static/node-start.jpg");
 
         // }
 

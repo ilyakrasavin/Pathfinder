@@ -156,7 +156,7 @@ class Graph{
 
         // Initialization Pass -> Connection Pass
         // REMOVE WINDOW REFERENCE LATER
-        Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int startIdx);
+        Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int startIdx, int idxIncrements);
         int getMatrixSize();
 
         void setStartNode(shared_ptr<Node>);
@@ -183,7 +183,7 @@ class Graph{
 
 
 // REMOVE WINDOW REFERENCE LATER
-Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int StartIdx){
+Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int StartIdx, int IdxIncrements){
 
     // Traverse the board and create nodes
 
@@ -227,38 +227,38 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int Star
 
 
         // Top Left Node
-        if(nodeMapIdx % 30 == 0 && (nodeMapIdx == 0)){
+        if(nodeMapIdx % IdxIncrements == 0 && (nodeMapIdx == 0)){
             cout<<"Top left node"<<endl;
 
             // Connect to accessible neighbouring nodes
             this->nodeMatrix[nodeMapIdx].get()->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
-            this->nodeMatrix[nodeMapIdx].get()->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
-            this->nodeMatrix[nodeMapIdx].get()->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
+            this->nodeMatrix[nodeMapIdx].get()->setNext45down(this->nodeMatrix[nodeMapIdx + IdxIncrements + 1]);
+            this->nodeMatrix[nodeMapIdx].get()->setNextDown(this->nodeMatrix[nodeMapIdx + IdxIncrements]);
 
             continue;
 
         }
 
         // Top Right Node
-        else if(nodeMapIdx % 30 == 29 && nodeMapIdx == 29){
+        else if((nodeMapIdx % IdxIncrements == (IdxIncrements - 1)) && (nodeMapIdx == (IdxIncrements -1))){
             cout<<"Top Right node"<<endl;
 
             this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
-            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + IdxIncrements - 1]);
 
             continue;
 
         }
 
         // Bottom Left Node
-        else if(nodeMapIdx % 30 == 0 && nodeMapIdx + 30 > matrixSize){
+        else if((nodeMapIdx % IdxIncrements == 0) && (nodeMapIdx + IdxIncrements > matrixSize)){
 
             cout<<"Bottom Left Node"<<endl;
 
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
-            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
-            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - IdxIncrements + 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - IdxIncrements]);
 
 
             continue;
@@ -266,13 +266,13 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int Star
         }
 
         // Bottom Right Node
-        else if(nodeMapIdx % 30 == 29 && (nodeMapIdx + 1 >= matrixSize)){
+        else if((nodeMapIdx % IdxIncrements == (IdxIncrements-1)) && (nodeMapIdx + 1 >= matrixSize)){
 
             cout<<"Bottom Right Node"<<endl;
 
             this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
-            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - IdxIncrements - 1]);
 
 
             continue;
@@ -280,15 +280,15 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int Star
         }
 
         // Left Edge Node
-        else if(nodeMapIdx % 30 == 0 && nodeMapIdx + 30 < matrixSize){
+        else if((nodeMapIdx % IdxIncrements == 0) && (nodeMapIdx + IdxIncrements < matrixSize)){
 
             cout<<"Left Edge Node"<<endl;
 
-            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
-            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - IdxIncrements + 1]);
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
-            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
-            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + IdxIncrements + 1]);
 
 
             continue;
@@ -297,15 +297,15 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int Star
 
 
         // Right Edge Node
-        else if(nodeMapIdx % 30 == 29 && nodeMapIdx + 30 < matrixSize){
+        else if((nodeMapIdx % IdxIncrements == (IdxIncrements-1)) && (nodeMapIdx + IdxIncrements < matrixSize)){
 
             cout<<"Right Edge Node"<<endl;
 
-            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - IdxIncrements - 1]);
             this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
-            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + IdxIncrements - 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + IdxIncrements]);
 
 
             continue;
@@ -314,27 +314,27 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int Star
 
 
         // Top Edge Node
-        else if(nodeMapIdx > 0 && nodeMapIdx < 29){
+        else if(nodeMapIdx > 0 && (nodeMapIdx < (IdxIncrements - 1))){
             cout<<"Top edge Node"<<endl;
 
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
             this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
-            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
-            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
+            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + IdxIncrements + 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + IdxIncrements - 1]);
 
 
             continue;
 
         }
 
-        else if(nodeMapIdx > getMatrixSize() - 31 && nodeMapIdx < getMatrixSize() - 1){
+        else if(nodeMapIdx > (getMatrixSize() - (IdxIncrements + 1)) && (nodeMapIdx < (getMatrixSize() - 1))){
             cout<<"Bottom edge node"<<endl;
 
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
-            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
-            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - IdxIncrements + 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - IdxIncrements - 1]);
             this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
 
 
@@ -349,14 +349,14 @@ Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int Star
 
             cout<<"Middle Node"<<endl;
 
-            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - 30]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - 31]);
+            this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45up(this->nodeMatrix[nodeMapIdx - IdxIncrements - 1]);
             this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
-            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + 29]);
-            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + 30]);
-            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + 31]);
+            this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + IdxIncrements - 1]);
+            this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + IdxIncrements]);
+            this->nodeMatrix[nodeMapIdx]->setNext45down(this->nodeMatrix[nodeMapIdx + IdxIncrements + 1]);
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx +1]);
-            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - 29]);
+            this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - IdxIncrements + 1]);
 
             continue;
         }
