@@ -20,12 +20,12 @@ using namespace std;
 
 // TODO:
 
-// FIX THE WALLS BEING IGNORED & OVERWRITTEN!
-
 // 1. !! Decide on & implement the final interface !!
 // 2. Implement Algorithm Selection AND proper restart feature
 // 3. Some Algorithm GUI & Basic info panel
 // 4. Verify BFS & DFS
+
+// Random Walls
 
 // OOP!
 // Application class
@@ -37,6 +37,10 @@ using namespace std;
 
 
 
+// DONE:
+// FIX THE WALLS BEING IGNORED & OVERWRITTEN! -> New objects created on stack produced a problem (copies located in a vector => No reference to actual object)
+
+
 int main()
 {
     // Main Rendering Window 
@@ -44,9 +48,56 @@ int main()
     window.setFramerateLimit(60);
 
 
+    sf::RectangleShape upperBuffer(sf::Vector2f(1600, 80));
+    upperBuffer.setPosition(0, 0);
+    upperBuffer.setFillColor(sf::Color(65,105,225));
+
+
+    sf::RectangleShape bottomBuffer(sf::Vector2f(1600, 160));
+    bottomBuffer.setPosition(0, 1440);
+    bottomBuffer.setFillColor(sf::Color(65,105,225));
+
+    // Set up fonts
+    sf::Font font;
+    if (!font.loadFromFile("../assets-static/Raleway-Regular.ttf"))
+        return EXIT_FAILURE;
+    sf::Text text1("BFS", font, 45);
+    text1.setColor(sf::Color::Yellow);
+    text1.setPosition(sf::Vector2f(80, 12));
+
+    sf::Text text2("DFS", font, 45);
+    text2.setColor(sf::Color::Yellow);
+    text2.setPosition(sf::Vector2f(200, 12));
+
+    sf::Text text3("A*", font, 45);
+    text3.setColor(sf::Color::Yellow);
+    text3.setPosition(sf::Vector2f(360, 12));
+
+    sf::Text text4("Djkstra", font, 45);
+    text4.setColor(sf::Color::Yellow);
+    text4.setPosition(sf::Vector2f(500, 12));
+
+
+    sf::Text textStart("Start", font, 45);
+    textStart.setColor(sf::Color::Yellow);
+    textStart.setPosition(sf::Vector2f(80, 1455));
+
+    sf::Text textReset("Reset", font, 45);
+    textReset.setColor(sf::Color::Yellow);
+    textReset.setPosition(sf::Vector2f(200, 1455));
+
+    sf::Text textRandom("Random Map", font, 45);
+    textRandom.setColor(sf::Color::Yellow);
+    textRandom.setPosition(sf::Vector2f(600, 1455));
+
+    sf::Text textInfo("Hold 'W' to set the Walls (Or press Random)\nHold 'S' to set the Start\nHold 'F' to set the Target", font, 30);
+    textInfo.setColor(sf::Color::Yellow);
+    textInfo.setPosition(sf::Vector2f(920, 1455));
+
+
+
     // Mouse Release Check
     bool mouseReleased = false;
-
 
     // Frame Rate Setup
     sf::Clock clock;
@@ -57,7 +108,7 @@ int main()
 
     // Initialize the board of cells
 
-    for(int i = 0; i < window.getSize().y;){
+    for(int i = 80; i < window.getSize().y - 160;){
 
         for(int k = 0; k < window.getSize().x;){
 
@@ -87,7 +138,20 @@ int main()
 
     int startIdx = 0;
 
+
+
     bool breadthFirstSearch = true;
+    bool depthFirstSearch = true;
+    bool aStar = true;
+    bool djkstra = true;
+
+    bool isAlgoChosen = false;
+    bool isStartPressed = false;
+    bool isRandomMap = false;
+    
+
+
+
 
 
     // Rendering Window Outer loop
@@ -119,7 +183,7 @@ int main()
                 cout<<yPos<<endl;
 
                 // Calculate the Cell index & replace
-                int cellIdx = (yPos/80) * 20 + xPos / 80;
+                int cellIdx = ((yPos - 80)/80) * 20 + xPos / 80;
                 cout<<"Cell IDX is "<<cellIdx<<endl;
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
@@ -164,7 +228,17 @@ int main()
                 boardCells[i]->render(window);
             }
 
-            // window.draw(text);
+
+            window.draw(upperBuffer);
+            window.draw(bottomBuffer);
+            window.draw(text1);
+            window.draw(text2);
+            window.draw(text3);
+            window.draw(text4);
+            window.draw(textStart);
+            window.draw(textReset);
+            window.draw(textInfo);
+            window.draw(textRandom);
             window.display();
 
             cout<<"START INDEX IS: "<<startIdx<<endl;
@@ -194,6 +268,7 @@ int main()
                         boardCells[i]->render(window);
                     }
                     window.display();
+    
 
                     isStartSet = false;
                     isFinishSet = false;
@@ -202,7 +277,6 @@ int main()
                 }
 
             }
-
 
 
 

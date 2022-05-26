@@ -61,7 +61,7 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
             int randomIdx = randomNum() % (7 - traversedCount);
             
-            if(adjacent[randomIdx] != nullptr && !adjacent[randomIdx]->isExplored()){
+            if(adjacent[randomIdx] != nullptr && !adjacent[randomIdx]->isExplored() && !adjacent[randomIdx]->isWall()){
                 toExplore.push(adjacent[randomIdx]);
                 adjacent[randomIdx] = nullptr;
             }
