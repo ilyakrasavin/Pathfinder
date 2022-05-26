@@ -97,6 +97,11 @@ class mapCell : public Sprite2DComponent{
         bool checkIsExplored(){return isExplored;}
         int setIdx(int);
 
+        void setTarget(){isTarget = true;}
+        void setWall(){isWall = true;}
+        void setStart(){isStart = true;}
+        void setExplored(){isExplored = true;}
+
         ~mapCell(){}
 
 

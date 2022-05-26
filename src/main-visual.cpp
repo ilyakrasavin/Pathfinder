@@ -16,6 +16,27 @@ using namespace std;
 #include "Algorithms/BFS.hpp"
 #include "Algorithms/DFS.hpp"
 
+
+
+// TODO:
+
+// FIX THE WALLS BEING IGNORED & OVERWRITTEN!
+
+// 1. !! Decide on & implement the final interface !!
+// 2. Implement Algorithm Selection AND proper restart feature
+// 3. Some Algorithm GUI & Basic info panel
+// 4. Verify BFS & DFS
+
+// OOP!
+// Application class
+// Interface (Add components)
+
+// A* theory
+// Another graph class with weight & edges support
+// Add edges
+
+
+
 int main()
 {
     // Main Rendering Window 
@@ -40,7 +61,7 @@ int main()
 
         for(int k = 0; k < window.getSize().x;){
 
-            shared_ptr<mapCell> test= make_shared<mapCell>("../assets-static/node-empty.jpg", false, false, false, false);
+            shared_ptr<mapCell> test = make_shared<mapCell>("../assets-static/node-empty.jpg", false, false, false, false);
             test->SetPosition(k, i);
 
             boardCells.push_back(test);
@@ -85,12 +106,11 @@ int main()
 
             cout<<"FPS: "<<fps<<endl;
 
-            // Some event handling examples
             if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
                 window.close();
 
 
-            // Set the Walls
+            // Set the cell Attributes
             if(event.type == sf::Event::MouseButtonPressed){
                 // Gets Positions in window coordinates
                 int xPos = sf::Mouse::getPosition(window).x;
@@ -103,23 +123,32 @@ int main()
                 cout<<"Cell IDX is "<<cellIdx<<endl;
 
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
-                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/node-wall.jpg", false, true, false, false);
+                    boardCells[cellIdx]->resetAttributes();
+                    boardCells[cellIdx]->setTexture("../assets-static/node-wall.jpg");
+                    boardCells[cellIdx]->setWall();
                     cout<<"Put a WALL @"<<cellIdx<<endl;
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !isFinishSet){
-                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/node-finish.jpg", true, false, false, false);
                     isFinishSet = true;
+
+                    boardCells[cellIdx]->resetAttributes();
+                    boardCells[cellIdx]->setTexture("../assets-static/node-finish.jpg");
+                    boardCells[cellIdx]->setTarget();
+
                     cout<<"Finish is set at position: "<<cellIdx<<endl;
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && !isStartSet){
-                    boardCells[cellIdx] = make_shared<mapCell>("../assets-static/node-start.jpg", false, false, true, false);
                     isStartSet = true;
                     startIdx = cellIdx;
+
+                    boardCells[cellIdx]->resetAttributes();
+                    boardCells[cellIdx]->setTexture("../assets-static/node-start.jpg");
+                    boardCells[cellIdx]->setStart();
+
                 }
                 else{
                     continue;
                 }
-
 
                 boardCells[cellIdx]->SetPosition(xPos - xPos%80, yPos - yPos%80);
                 cout<<"Position set at "<<xPos - xPos%80<<" And :"<<yPos - yPos%80<<endl;
@@ -148,7 +177,7 @@ int main()
                 // Further Graph updates and rendering done within the algorithm
 
                 Graph graph(&boardCells, window, startIdx, 20);
-                bool SearchResult = DepthFirstSearch(&graph, window);
+                bool SearchResult = BreadthFirstSearch(&graph, window);
 
                 breadthFirstSearch = false;
 

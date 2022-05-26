@@ -141,13 +141,6 @@ class Node{
 };
 
 
-class NodeWeighted : public Node{
-
-};
-
-class NodeDistance : public Node{
-
-};
 
 
 class Graph{

@@ -33,9 +33,9 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             return true;
         }
 
-        // if(currentNode->getCellRef()->checkIsWall()){
-        //     cout<<"I AM A WALL!!"<<endl;
-        // }
+        if(currentNode->getCellRef()->checkIsWall()){
+            cout<<"I AM A WALL!!"<<endl;
+        }
 
 
         shared_ptr<Node> nextRight = currentNode->getNextRight();
@@ -44,7 +44,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(nextRight != nullptr){
 
             // Adjacent node not previously explored & is not a Wall
-            if(!nextRight->isExplored() && !nextRight->isWall()){
+            if(!nextRight->isExplored() && !nextRight->getCellRef()->checkIsWall()){
 
                 if(nextRight->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -63,8 +63,9 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(nextRight->isExplored()){
                 cout<<"Next Right Child already explored"<<endl;
             }
-            else if(nextRight->isWall()){
+            else if(nextRight->getCellRef()->checkIsWall()){
                 cout<<"Next Right Cell is an obstacle, can not explore!"<<endl;
+                nextRight->getCellRef()->setTexture("assets-static/node-wall.jpg");
             }
 
         }
@@ -78,7 +79,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         // Adjacent Node Exists
         if(next45up != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!next45up->isExplored() && !next45up->isWall()){
+            if(!next45up->isExplored() && !next45up->getCellRef()->checkIsWall()){
 
                 if(next45up->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -97,8 +98,10 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(next45up->isExplored()){
                 cout<<"Next 45 Up Child already explored"<<endl;
             }
-            else if(next45up->isWall()){
+            else if(next45up->getCellRef()->checkIsWall()){
                 cout<<"Next 45 Up Cell is an obstacle, can not explore!"<<endl;
+                next45up->getCellRef()->setTexture("assets-static/node-wall.jpg");
+
             }
 
         }
@@ -113,7 +116,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         // Adjacent Node Exists
         if(nextUp != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!nextUp->isExplored() && !nextUp->isWall()){
+            if(!nextUp->isExplored() && !nextUp->getCellRef()->checkIsWall()){
 
                 if(nextUp->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -132,8 +135,11 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(nextUp->isExplored()){
                 cout<<"Next Up Child already explored"<<endl;
             }
-            else if(nextUp->isWall()){
+            else if(nextUp->getCellRef()->checkIsWall()){
                 cout<<"Next Up Cell is an obstacle, can not explore!"<<endl;
+                nextUp->getCellRef()->setTexture("assets-static/node-wall.jpg");
+
+
             }
        
         }
@@ -147,7 +153,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         // Adjacent Node Exists
         if(prev45up != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!prev45up->isExplored() && !prev45up->isWall()){
+            if(!prev45up->isExplored() && !prev45up->getCellRef()->checkIsWall()){
 
                 if(prev45up->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -167,8 +173,9 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(prev45up->isExplored()){
                 cout<<"Prev 45Up Child already explored"<<endl;
             }
-            else if(prev45up->isWall()){
+            else if(prev45up->getCellRef()->checkIsWall()){
                 cout<<"Prev 45Up Cell is an obstacle, can not explore!"<<endl;
+                prev45up->getCellRef()->setTexture("assets-static/node-wall.jpg");
             }
 
         }
@@ -178,12 +185,11 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
 
 
-
         shared_ptr<Node> prevLeft = currentNode->getPrevLeft();
         // Adjacent Node Exists
         if(prevLeft != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!prevLeft->isExplored() && !prevLeft->isWall()){
+            if(!prevLeft->isExplored() && !prevLeft->getCellRef()->checkIsWall()){
 
                 if(prevLeft->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -203,8 +209,10 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(prevLeft->isExplored()){
                 cout<<"Prev Left Child already explored"<<endl;
             }
-            else if(prevLeft->isWall()){
+            else if(prevLeft->getCellRef()->checkIsWall()){
                 cout<<"Prev Left Cell is an obstacle, can not explore!"<<endl;
+                prevLeft->getCellRef()->setTexture("assets-static/node-wall.jpg");
+
             }
             
         }
@@ -215,12 +223,11 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
 
 
-
         shared_ptr<Node> prev45down = currentNode->getPrev45down();
         // Adjacent Node Exists
         if(prev45down != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!prev45down->isExplored() && !prev45down->isWall()){
+            if(!prev45down->isExplored() && !prev45down->getCellRef()->checkIsWall()){
 
                 if(prev45down->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -240,8 +247,9 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(prev45down->isExplored()){
                 cout<<"Prev 45 Down Child already explored"<<endl;
             }
-            else if(prev45down->isWall()){
+            else if(prev45down->getCellRef()->checkIsWall()){
                 cout<<"Prev 45 Down Cell is an obstacle, can not explore!"<<endl;
+                prev45down->getCellRef()->setTexture("assets-static/node-wall.jpg");
             }
 
         }
@@ -255,7 +263,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         // Adjacent Node Exists
         if(nextDown != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!nextDown->isExplored() && !nextDown->isWall()){
+            if(!nextDown->isExplored() && !nextDown->getCellRef()->checkIsWall()){
 
                 if(nextDown->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -276,8 +284,10 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(nextDown->isExplored()){
                 cout<<"Next Down Child already explored"<<endl;
             }
-            else if(nextDown->isWall()){
+            else if(nextDown->getCellRef()->checkIsWall()){
                 cout<<"Next Down Cell is an obstacle, can not explore!"<<endl;
+                nextDown->getCellRef()->setTexture("assets-static/node-wall.jpg");
+
             }
       
         }
@@ -288,13 +298,11 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
 
 
-
-
         shared_ptr<Node> next45down = currentNode->getNext45down();
         // Adjacent Node Exists
         if(next45down != nullptr){
             // Adjacent node not previously explored & is not a Wall
-            if(!next45down->isExplored() && !next45down->isWall()){
+            if(!next45down->isExplored() && !next45down->getCellRef()->checkIsWall()){
 
                 if(next45down->isTarget()){
                     cout<<"Target Found!"<<endl;
@@ -314,8 +322,10 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(next45down->isExplored()){
                 cout<<"Next 45 Down Child already explored"<<endl;
             }
-            else if(next45down->isWall()){
+            else if(next45down->getCellRef()->checkIsWall()){
                 cout<<"Next 45 Down Cell is an obstacle, can not explore!"<<endl;
+                next45down->getCellRef()->setTexture("assets-static/node-wall.jpg");
+
             }
 
         }
@@ -326,13 +336,9 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
         // Mark current node as explored
         
-        // if(!currentNode->isExplored())
-        // {
         explored.push_back(currentNode);
         currentNode->setExplored();
         currentNode->getCellRef()->setTexture("../assets-static/node-start.jpg");
-
-        // }
 
 
         cout<<"Nodes explored: "<<explored.size()<<endl;
