@@ -1,3 +1,6 @@
+#ifndef DFS_H
+#define DFS_H
+
 #include "../Graph.hpp"
 #include <vector>
 #include <stack>
@@ -5,7 +8,7 @@
 
 #include <random>
 
-bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
+bool DepthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef){
 
     shared_ptr<Node> startNode = graph->getStartNode();
     stack<shared_ptr<Node>> toExplore;
@@ -35,7 +38,7 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         for(auto each: graph->nodeMatrix){
             each->getCellRef()->render(windowRef);
         }
-        windowRef.display();
+        windowRef->display();
 
 
         if(temp->isTarget()){
@@ -79,3 +82,4 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 }
 
 
+#endif

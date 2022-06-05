@@ -15,8 +15,11 @@ using namespace std;
 class Node{
 
     public:
+
+        Node(){};
+
         // Default constructor
-        Node(shared_ptr<mapCell> reference, int index, bool isStartIn, bool isWallIn, bool isExploredIn, bool isTargetIn){
+        Node(const shared_ptr<mapCell> reference, int index, bool isStartIn, bool isWallIn, bool isExploredIn, bool isTargetIn){
 
             this->cellRef = reference;
 
@@ -36,23 +39,6 @@ class Node{
             prev45down = nullptr;
             next45down = nullptr;
 
-            nextRightWeight = 0;
-            prevLeftWeight = 0;
-            nextUpWeight = 0;
-            nextDownWeight = 0;
-            prev45UpWeight = 0;
-            next45UpWeight = 0;
-            prev45DownWeight = 0;
-            next45DownWeight = 0;
-
-            nextRightDistance = 0;
-            prevLeftDistance = 0;
-            nextUpDistance = 0;
-            nextDownDistance = 0;
-            prev45UpDistance = 0;
-            next45UpDistance = 0;
-            prev45DownDistance = 0;
-            next45DownDistance = 0;
 
         }
          
@@ -68,32 +54,32 @@ class Node{
         void setNext45down(shared_ptr<Node> next45down){this->next45down = next45down;}
 
         // Node connection getters
-        shared_ptr<Node> getNextRight(){return nextRight;}
-        shared_ptr<Node> getPrevLeft(){return prevLeft;}
-        shared_ptr<Node> getNextUp(){return nextUp;}
-        shared_ptr<Node> getNextDown(){return nextDown;}
-        shared_ptr<Node> getPrev45up(){return prev45down;}
-        shared_ptr<Node> getNext45up(){return next45up;}
-        shared_ptr<Node> getPrev45down(){return prev45down;}
-        shared_ptr<Node> getNext45down(){return next45down;}
+        const shared_ptr<Node> getNextRight(){return nextRight;}
+        const shared_ptr<Node> getPrevLeft(){return prevLeft;}
+        const shared_ptr<Node> getNextUp(){return nextUp;}
+        const shared_ptr<Node> getNextDown(){return nextDown;}
+        const shared_ptr<Node> getPrev45up(){return prev45down;}
+        const shared_ptr<Node> getNext45up(){return next45up;}
+        const shared_ptr<Node> getPrev45down(){return prev45down;}
+        const shared_ptr<Node> getNext45down(){return next45down;}
 
         // Attribute check
-        bool isExplored(){return isExploredNode;}        
-        bool isStart(){return isStartNode;}
-        bool isWall(){return isWallNode;}
-        bool isTarget(){return isTargetNode;}
-        int getIdx(){return mapIdx;}
+        const bool isExplored(){return isExploredNode;}        
+        const bool isStart(){return isStartNode;}
+        const bool isWall(){return isWallNode;}
+        const bool isTarget(){return isTargetNode;}
+        const int getIdx(){return mapIdx;}
 
 
-        shared_ptr<mapCell> getCellRef();
+        const shared_ptr<mapCell> getCellRef();
 
         // Attribure setters
         void setExplored(){isExploredNode = true;}
         void setIdx(int idx){mapIdx = idx;}
 
-        ~Node(){};
+        virtual ~Node(){};
 
-    private:
+    protected:
         // Reference to a cell in a Render-able map
         shared_ptr<mapCell> cellRef;
 
@@ -116,28 +102,6 @@ class Node{
         bool isTargetNode;
 
 
-        // MOVE INTO SEPARATE NODE SUBCLASSES
-
-        // Weights May be used for heuristic-based algorithms (A* ..)
-        float nextRightWeight;
-        float prevLeftWeight;
-        float nextUpWeight;
-        float nextDownWeight;
-        float prev45UpWeight;
-        float next45UpWeight;
-        float prev45DownWeight;
-        float next45DownWeight;
-
-        // Distances May be used for distance-based algorithms (Djkstra..)
-        float nextRightDistance;
-        float prevLeftDistance;
-        float nextUpDistance;
-        float nextDownDistance;
-        float prev45UpDistance;
-        float next45UpDistance;
-        float prev45DownDistance;
-        float next45DownDistance;
-
 };
 
 
@@ -149,26 +113,23 @@ class Graph{
 
         // Initialization Pass -> Connection Pass
         // REMOVE WINDOW REFERENCE LATER
-        Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int startIdx, int idxIncrements);
-        int getMatrixSize();
+        Graph(){}
+        Graph(const vector<shared_ptr<mapCell>>* board, const shared_ptr<sf::RenderWindow> ref, const int startIdx, const int idxIncrements);
+        const int getMatrixSize();
 
         void setStartNode(shared_ptr<Node>);
         void setStartIdx(int);
-        shared_ptr<Node> getStartNode();
+        const shared_ptr<Node> getStartNode();
 
         vector<shared_ptr<Node>> nodeMatrix;
 
 
-        ~Graph();
+        virtual ~Graph();
 
-    private:
+
+    protected:
         // Essential References
-        // vector<shared_ptr<mapCell>>* boardCells;
         shared_ptr<Node> StartNode;
-
-        // Traversal References
-        // Node* currentNode;
-
 
         int startIdx;
 
@@ -176,7 +137,7 @@ class Graph{
 
 
 // REMOVE WINDOW REFERENCE LATER
-Graph::Graph(vector<shared_ptr<mapCell>>* board, sf::RenderWindow& ref, int StartIdx, int IdxIncrements){
+Graph::Graph(const vector<shared_ptr<mapCell>>* board, const shared_ptr<sf::RenderWindow> ref, const int StartIdx, const int IdxIncrements){
 
     // Traverse the board and create nodes
 
@@ -364,12 +325,12 @@ void Graph::setStartNode(shared_ptr<Node> startNode){
     this->StartNode = startNode;
 }
 
-shared_ptr<Node> Graph::getStartNode(){return this->StartNode;}
+const shared_ptr<Node> Graph::getStartNode(){return this->StartNode;}
 
-int Graph::getMatrixSize(){return this->nodeMatrix.size();}
+const int Graph::getMatrixSize(){return this->nodeMatrix.size();}
 
 
-shared_ptr<mapCell> Node::getCellRef(){return this->cellRef;}
+const shared_ptr<mapCell> Node::getCellRef(){return this->cellRef;}
 
 void Graph::setStartIdx(int idx){
     this->startIdx = idx;

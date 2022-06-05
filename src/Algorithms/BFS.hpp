@@ -1,9 +1,12 @@
+#ifndef BFS_H
+#define BFS_H
+
 #include "../Graph.hpp"
 #include <vector>
 #include <queue>
 #include <iostream>
 
-bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
+bool BreadthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef){
 
 // Run the algorithm AND perform rendering within the algoritm
 
@@ -28,7 +31,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
     while(true){
 
 
-        if(currentNode->isTarget()){
+        if(currentNode->getCellRef()->checkIsTarget()){
             cout<<"target found @ "<<currentNode->getIdx()<<endl;
             return true;
         }
@@ -138,7 +141,6 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
             else if(nextUp->getCellRef()->checkIsWall()){
                 cout<<"Next Up Cell is an obstacle, can not explore!"<<endl;
                 nextUp->getCellRef()->setTexture("assets-static/node-wall.jpg");
-
 
             }
        
@@ -347,7 +349,7 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         for(auto each: graph->nodeMatrix){
             each->getCellRef()->render(windowRef);
         }
-        windowRef.display();
+        windowRef->display();
 
 
         // Queue is empty! Done
@@ -366,3 +368,6 @@ bool BreadthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
     return false;
 }
+
+
+#endif

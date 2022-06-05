@@ -7,7 +7,7 @@ class IComponent{
     public:
 
         // Pure Virtual: Need to be implemented in Inheriting classes
-        virtual void render(sf::RenderWindow& ref) = 0;
+        virtual void render(shared_ptr<sf::RenderWindow> ref) = 0;
         virtual void SetPosition(float x, float y) = 0;
 
         // Releases Base Resources
@@ -32,8 +32,8 @@ class Sprite2DComponent : public IComponent{
             m_sprite.setPosition(x, y);
         }
 
-        void render(sf::RenderWindow& ref) override{
-            ref.draw(m_sprite);
+        void render(shared_ptr<sf::RenderWindow> ref) override{
+            ref->draw(m_sprite);
         }
 
 
@@ -73,8 +73,8 @@ class mapCell : public Sprite2DComponent{
             m_sprite.setPosition(x, y);
         }
 
-        void render(sf::RenderWindow& ref) override{
-            ref.draw(m_sprite);
+        void render(shared_ptr<sf::RenderWindow> ref){
+            ref->draw(m_sprite);
         }
 
         void setTexture(string filepath){
@@ -84,6 +84,10 @@ class mapCell : public Sprite2DComponent{
         }
 
 
+        void distanceLabel();
+        void weightLabel();
+
+
         void resetAttributes(){
             this->isTarget = false;
             this->isWall = false;
@@ -91,16 +95,20 @@ class mapCell : public Sprite2DComponent{
             this->isStart = false;
         }
 
-        bool checkIsTarget(){return isTarget;}
-        bool checkIsWall(){return isWall;}
-        bool checkIsStart(){return isStart;}
-        bool checkIsExplored(){return isExplored;}
+        const bool checkIsTarget(){return isTarget;}
+        const bool checkIsWall(){return isWall;}
+        const bool checkIsStart(){return isStart;}
+        const bool checkIsExplored(){return isExplored;}
         int setIdx(int);
 
         void setTarget(){isTarget = true;}
         void setWall(){isWall = true;}
         void setStart(){isStart = true;}
         void setExplored(){isExplored = true;}
+
+
+        
+    
 
         ~mapCell(){}
 
@@ -117,8 +125,57 @@ class mapCell : public Sprite2DComponent{
 
         int cellIdx;
 
+        int curEst;
+        int curScore;
+
+
 };
 
+
+
+
+class Button: public Sprite2DComponent{
+
+    public:
+
+        Button(sf::Color colour, sf::Font font, string text, pair<int, int> pos);
+
+        void setInactive();
+        void setActive();
+
+        string getString(){return button.getString();}
+
+        void render(shared_ptr<sf::RenderWindow> ref){
+            ref->draw(this->button);
+        }
+
+        sf::Text getButton(){return button;}
+
+        ~Button(){}
+
+    private:
+
+        bool isActive;
+        bool isInactive;
+
+        sf::Text button;
+
+};
+
+
+Button::Button(sf::Color colour, sf::Font font, string text, pair<int, int> pos){
+    
+    this->button = sf::Text(text, font, 45);
+    this->button.setColor(colour);
+    this->button.setPosition(sf::Vector2f(pos.first, pos.second));
+
+    isActive = true;
+    isInactive = false;
+
+}
+
+void Button::setActive(){}
+void Button::setInactive(){}
 
 
 #endif
