@@ -63,6 +63,29 @@ class NodeExp : public Node{
 
         }
 
+        void setNextRight(shared_ptr<NodeExp> nextRight){this->nextRight = nextRight;}
+        void setPrevLeft(shared_ptr<NodeExp> prevLeft){this->prevLeft = prevLeft;}
+        void setNextUp(shared_ptr<NodeExp> nextUp){this->nextUp = nextUp;}
+        void setNextDown(shared_ptr<NodeExp> nextDown){this->nextDown = nextDown;}
+        void setPrev45up(shared_ptr<NodeExp> prev45up){this->prev45up = prev45up;}
+        void setNext45up(shared_ptr<NodeExp> next45up){this->next45up = next45up;}
+        void setPrev45down(shared_ptr<NodeExp> prev45down){this->prev45down = prev45down;}
+        void setNext45down(shared_ptr<NodeExp> next45down){this->next45down = next45down;}
+
+        // Node connection getters
+        shared_ptr<NodeExp> getNextRight() const {return nextRight;}
+        shared_ptr<NodeExp> getPrevLeft() const {return prevLeft;}
+        shared_ptr<NodeExp> getNextUp() const {return nextUp;}
+        shared_ptr<NodeExp> getNextDown() const {return nextDown;}
+        shared_ptr<NodeExp> getPrev45up() const {return prev45down;}
+        shared_ptr<NodeExp> getNext45up() const {return next45up;}
+        shared_ptr<NodeExp> getPrev45down() const {return prev45down;}
+        shared_ptr<NodeExp> getNext45down() const {return next45down;}
+
+
+
+        // Extended functionality
+
 
         // Node Weight (if needed)
         void setNextRightWeight(const int wght){this->nextRightWeight = wght;}
@@ -106,9 +129,9 @@ class NodeExp : public Node{
         void setEstimate(int est){this->heurEst = est;}
         void setCurrent(int cur);
 
-        constexpr const int getEstimate(){return this->heurEst;}
-        constexpr const int getCurrent(){return this->curScore;}
-        constexpr const int getAScore(){return this->heurEst + this->curScore;}
+        const int getEstimate(){return this->heurEst;}
+        const int getCurrent(){return this->curScore;}
+        const int getFScore(){return this->heurEst + this->curScore;}
 
         ~NodeExp(){}
 
@@ -119,6 +142,16 @@ class NodeExp : public Node{
         int heurEst;
         int curScore;
         // A-Star score = Cost of path to current Node + Heuristic (current to target estimate)
+
+        shared_ptr<NodeExp> nextRight;
+        shared_ptr<NodeExp> prevLeft;
+        shared_ptr<NodeExp> nextUp;
+        shared_ptr<NodeExp> nextDown;
+        shared_ptr<NodeExp> prev45up;
+        shared_ptr<NodeExp> next45up;
+        shared_ptr<NodeExp> prev45down;
+        shared_ptr<NodeExp> next45down;
+
 
         // Weights May be used for heuristic-based algorithms (A* ..)
         float nextRightWeight;
@@ -168,13 +201,19 @@ class GraphWeighted : public Graph{
         int EuclidianDistance (const int idx, const int xDim, const int yDim) const;
 
 
-        const shared_ptr<NodeExp> getStartNode() const {return startNode;}
+        shared_ptr<NodeExp> getStartNode() const {return startNode;}
+        const int getMatrixSize() const{return this->nodeMatrix.size();}
+
+        void setStartNode(shared_ptr<NodeExp> newStart){this->startNode = newStart;}
+
 
         ~GraphWeighted(){}
 
-    private:
 
         vector<shared_ptr<NodeExp>> nodeMatrix;
+
+
+    private:
 
         shared_ptr<NodeExp> startNode;
 
@@ -226,7 +265,7 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             cout<<"Top left node"<<endl;
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             // Connect to accessible neighbouring nodes
@@ -249,7 +288,7 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             cout<<"Top Right node"<<endl;
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
 
@@ -266,12 +305,12 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
         }
 
         // Bottom Left Node
-        else if((nodeMapIdx % idxIncrements == 0) && (nodeMapIdx + idxIncrements > matrixSize)){
+        else if((nodeMapIdx % idxIncrements == 0) && (nodeMapIdx + idxIncrements >= matrixSize)){
 
             cout<<"Bottom Left Node"<<endl;
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
@@ -292,7 +331,7 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             cout<<"Bottom Right Node"<<endl;
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             this->nodeMatrix[nodeMapIdx]->setPrevLeft(this->nodeMatrix[nodeMapIdx - 1]);
@@ -315,7 +354,7 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             cout<<"Left Edge Node"<<endl;
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - idxIncrements]);
@@ -342,7 +381,7 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             cout<<"Right Edge Node"<<endl;
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             this->nodeMatrix[nodeMapIdx]->setNextUp(this->nodeMatrix[nodeMapIdx - idxIncrements]);
@@ -368,7 +407,7 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
 
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
@@ -387,12 +426,12 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
 
         }
 
-        else if(nodeMapIdx > (getMatrixSize() - (idxIncrements + 1)) && (nodeMapIdx < (getMatrixSize() - 1))){
+        else if(nodeMapIdx >= (this->getMatrixSize() - (idxIncrements + 1)) && (nodeMapIdx < (this->getMatrixSize() - 1))){
             cout<<"Bottom edge node"<<endl;
 
 
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx + 1]);
@@ -418,8 +457,10 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
 
             cout<<"Middle Node"<<endl;
 
+            cout<<"IS BOTTOM EDGE TRUE?: "<<(nodeMapIdx >= (this->getMatrixSize() - (idxIncrements + 1)) && (nodeMapIdx < (this->getMatrixSize() - 1)))<<endl;
+
             // Set the heuristic estimation
-            int heuristicRes = this->EuclidianDistance(nodeMapIdx, 20, 17);
+            int heuristicRes = this->ChebyshevDistance(nodeMapIdx, 20, 17);
             this->nodeMatrix[nodeMapIdx].get()->setEstimate(heuristicRes);
 
             cout<<"Heuristic estimate is: "<<heuristicRes<<endl;

@@ -1,6 +1,9 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+
+#include <cmath>
+
 // Base Interface for all components
 class IComponent{
 
@@ -32,7 +35,7 @@ class Sprite2DComponent : public IComponent{
             m_sprite.setPosition(x, y);
         }
 
-        void render(shared_ptr<sf::RenderWindow> ref) override{
+        virtual void render(shared_ptr<sf::RenderWindow> ref) override{
             ref->draw(m_sprite);
         }
 
@@ -67,14 +70,16 @@ class mapCell : public Sprite2DComponent{
             isStart = isStart;
             isExplored = isExplored;
 
+			font.loadFromFile("../assets-static/Raleway-Regular.ttf");
         }
 
         void SetPosition(float x, float y) override{
             m_sprite.setPosition(x, y);
         }
 
-        void render(shared_ptr<sf::RenderWindow> ref){
+        void render(shared_ptr<sf::RenderWindow> ref) override {
             ref->draw(m_sprite);
+            ref->draw(scoreLabel);
         }
 
         void setTexture(string filepath){
@@ -84,10 +89,6 @@ class mapCell : public Sprite2DComponent{
         }
 
 
-        void distanceLabel();
-        void weightLabel();
-
-
         void resetAttributes(){
             this->isTarget = false;
             this->isWall = false;
@@ -95,20 +96,28 @@ class mapCell : public Sprite2DComponent{
             this->isStart = false;
         }
 
+        void setScore(int score, int idx){
+
+            scoreLabel.setString(to_string(score));
+            scoreLabel.setFont(this->font);
+            scoreLabel.setCharacterSize(40);
+
+			scoreLabel.setColor(sf::Color::Red);
+			scoreLabel.setPosition(80 * (idx % 20) + 15, 80 * div(idx, 20).quot + 80 + 10);
+
+        }
+
         const bool checkIsTarget(){return isTarget;}
         const bool checkIsWall(){return isWall;}
         const bool checkIsStart(){return isStart;}
         const bool checkIsExplored(){return isExplored;}
-        int setIdx(int);
+        void setIdx(int idx){cellIdx = idx;}
 
         void setTarget(){isTarget = true;}
         void setWall(){isWall = true;}
         void setStart(){isStart = true;}
         void setExplored(){isExplored = true;}
 
-
-        
-    
 
         ~mapCell(){}
 
@@ -117,6 +126,9 @@ class mapCell : public Sprite2DComponent{
     
         sf::Texture m_texture;
         sf::Sprite m_sprite;
+
+        sf::Text scoreLabel;
+        sf::Font font;
 
         bool isTarget;
         bool isWall;

@@ -208,7 +208,6 @@ int main()
                     textStart.setColor(sf::Color(169,169,169));
 
                     app.getStateRef()->isStartPressed = true;
-                    
                 }
 
                 // Pressed Random Map

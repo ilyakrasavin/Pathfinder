@@ -54,14 +54,14 @@ class Node{
         void setNext45down(shared_ptr<Node> next45down){this->next45down = next45down;}
 
         // Node connection getters
-        const shared_ptr<Node> getNextRight(){return nextRight;}
-        const shared_ptr<Node> getPrevLeft(){return prevLeft;}
-        const shared_ptr<Node> getNextUp(){return nextUp;}
-        const shared_ptr<Node> getNextDown(){return nextDown;}
-        const shared_ptr<Node> getPrev45up(){return prev45down;}
-        const shared_ptr<Node> getNext45up(){return next45up;}
-        const shared_ptr<Node> getPrev45down(){return prev45down;}
-        const shared_ptr<Node> getNext45down(){return next45down;}
+        shared_ptr<Node> getNextRight() const {return nextRight;}
+        shared_ptr<Node> getPrevLeft() const {return prevLeft;}
+        shared_ptr<Node> getNextUp() const {return nextUp;}
+        shared_ptr<Node> getNextDown() const {return nextDown;}
+        shared_ptr<Node> getPrev45up() const {return prev45down;}
+        shared_ptr<Node> getNext45up() const {return next45up;}
+        shared_ptr<Node> getPrev45down() const {return prev45down;}
+        shared_ptr<Node> getNext45down() const {return next45down;}
 
         // Attribute check
         const bool isExplored(){return isExploredNode;}        
@@ -106,7 +106,6 @@ class Node{
 
 
 
-
 class Graph{
 
     public:
@@ -115,7 +114,7 @@ class Graph{
         // REMOVE WINDOW REFERENCE LATER
         Graph(){}
         Graph(const vector<shared_ptr<mapCell>>* board, const shared_ptr<sf::RenderWindow> ref, const int startIdx, const int idxIncrements);
-        const int getMatrixSize();
+        const int getMatrixSize() const;
 
         void setStartNode(shared_ptr<Node>);
         void setStartIdx(int);
@@ -134,6 +133,7 @@ class Graph{
         int startIdx;
 
 };
+
 
 
 // REMOVE WINDOW REFERENCE LATER
@@ -327,7 +327,7 @@ void Graph::setStartNode(shared_ptr<Node> startNode){
 
 const shared_ptr<Node> Graph::getStartNode(){return this->StartNode;}
 
-const int Graph::getMatrixSize(){return this->nodeMatrix.size();}
+const int Graph::getMatrixSize() const {return this->nodeMatrix.size();}
 
 
 const shared_ptr<mapCell> Node::getCellRef(){return this->cellRef;}
