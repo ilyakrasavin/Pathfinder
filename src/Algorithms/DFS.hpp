@@ -1,3 +1,6 @@
+#ifndef DFS_H
+#define DFS_H
+
 #include "../Graph.hpp"
 #include <vector>
 #include <stack>
@@ -5,7 +8,7 @@
 
 #include <random>
 
-bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
+bool DepthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef){
 
     shared_ptr<Node> startNode = graph->getStartNode();
     stack<shared_ptr<Node>> toExplore;
@@ -28,14 +31,14 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
         if(!temp->isExplored()){
             
             temp->setExplored();
-            temp->getCellRef()->setTexture("../assets-static/cell-neighbour.jpg");
+            temp->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
 
         }
 
         for(auto each: graph->nodeMatrix){
             each->getCellRef()->render(windowRef);
         }
-        windowRef.display();
+        windowRef->display();
 
 
         if(temp->isTarget()){
@@ -61,7 +64,7 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 
             int randomIdx = randomNum() % (7 - traversedCount);
             
-            if(adjacent[randomIdx] != nullptr && !adjacent[randomIdx]->isExplored()){
+            if(adjacent[randomIdx] != nullptr && !adjacent[randomIdx]->isExplored() && !adjacent[randomIdx]->isWall()){
                 toExplore.push(adjacent[randomIdx]);
                 adjacent[randomIdx] = nullptr;
             }
@@ -79,3 +82,4 @@ bool DepthFirstSearch(Graph* graph, sf::RenderWindow& windowRef){
 }
 
 
+#endif
