@@ -33,6 +33,8 @@ struct AppState{
     bool aStar = false;
     bool djkstra = false;
 
+    bool astarMode = false;
+
 };
 
 
@@ -123,6 +125,8 @@ Application::Application(const string name){
     state.depthFirstSearch = false;
     state.aStar = false;
     state.djkstra = false;
+
+    state.astarMode = false;
 
     mainWindow(1600, 1600);
     mainFrameRate(60);
@@ -253,6 +257,8 @@ void Application::resetState(){
     state.depthFirstSearch = false;
     state.aStar = false;
     state.djkstra = false;
+
+    state.astarMode = false;
 
 }
 
