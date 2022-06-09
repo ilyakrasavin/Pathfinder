@@ -10,6 +10,18 @@
 using std::cout, std::endl, std::string;
 
 
+
+
+// TODO
+// Fix being trapped in the corner with 90 degree wall???
+
+
+
+
+
+
+
+
 struct exlporedAStar{
 
     int boardIdx;
