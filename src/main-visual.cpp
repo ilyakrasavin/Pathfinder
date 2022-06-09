@@ -25,26 +25,29 @@ using namespace std;
 
 // TODO:
 
+// 
+
 // 4. Verify BFS & DFS
+// Verify AStar
 
-// Random Walls
+// DJkstra
 
+// Add CMake functionality
+
+
+// DOING:
+// Random Walls Generation
 // OOP!
 // Application class
 // Interface (Add components)
 
-// A* theory
-// Another graph class with weight & edges support
-// Add edges
-
-// Add CMake functionality
-
-// 3. Some Algorithm GUI & Basic info panel
-
-
-// DOING:
 
 // DONE:
+
+// Another graph class with weight & edges support
+// Add edges
+// 3. Some Algorithm GUI & Basic info panel
+// A* theory
 // FIX THE WALLS BEING IGNORED & OVERWRITTEN! -> New objects created on stack produced a problem (copies located in a vector => No reference to actual object)
 // 1. !! Decide on & implement the final interface !!
 // 2. Implement Algorithm Selection AND proper restart feature
@@ -91,6 +94,17 @@ int main()
     text4.setColor(sf::Color::Yellow);
     text4.setPosition(420,12);
 
+    sf::Text textEuc("Euclidian", font, 45);
+    textEuc.setColor(sf::Color::Yellow);
+    textEuc.setPosition(460,12);
+
+    sf::Text textManh("Manhattan", font, 45);
+    textManh.setColor(sf::Color::Yellow);
+    textManh.setPosition(700,12);
+
+    sf::Text textCheb("Chebushev", font, 45);
+    textCheb.setColor(sf::Color::Yellow);
+    textCheb.setPosition(970,12);
 
     sf::Text textStart("Start", font, 45);
     textStart.setColor(sf::Color::Yellow);
@@ -182,6 +196,7 @@ int main()
 
                 }
 
+                // Choose AStar
                 else if(xPos >= 330 && xPos <= 380 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
                     text1.setColor(sf::Color(169,169,169));
                     text2.setColor(sf::Color(169,169,169));
@@ -190,7 +205,15 @@ int main()
                     app.getStateRef()->aStar = true;
                     app.getStateRef()->isAlgoChosen = true;
 
+                    app.getStateRef()->astarMode = true;
+
                 }
+
+                // TODO: Handle persistent display of computed (post start&finish flags)
+                // Chebushev
+                // Manhattan
+                // Euclidian
+                // Ensure reset/combinations work
 
 
                 // Pressed Reset 
@@ -220,6 +243,11 @@ int main()
                     // 
                 }
 
+                // Handle mouse presses all over the interface (out of bounds)
+                // With or without the key pressed
+                // else if(){
+
+                // }
 
                 // Calculate the Cell index & replace
                 int cellIdx = ((yPos - 80)/80) * 20 + xPos / 80;
@@ -267,14 +295,31 @@ int main()
 
             app.renderInterface();
 
-            app.getMainWindowRef()->draw(text1);
-            app.getMainWindowRef()->draw(text2);
-            app.getMainWindowRef()->draw(text3);
-            app.getMainWindowRef()->draw(text4);
-            app.getMainWindowRef()->draw(textStart);
-            app.getMainWindowRef()->draw(textReset);
-            app.getMainWindowRef()->draw(textInfo);
-            app.getMainWindowRef()->draw(textRandom);
+
+            if(app.getStateRef()->astarMode){
+                app.getMainWindowRef()->draw(textEuc);
+                app.getMainWindowRef()->draw(textManh);
+                app.getMainWindowRef()->draw(textCheb);
+
+                app.getMainWindowRef()->draw(text3);
+                app.getMainWindowRef()->draw(textStart);
+                app.getMainWindowRef()->draw(textReset);
+                app.getMainWindowRef()->draw(textInfo);
+                app.getMainWindowRef()->draw(textRandom);
+
+            }
+            else{
+
+                app.getMainWindowRef()->draw(text1);
+                app.getMainWindowRef()->draw(text2);
+                app.getMainWindowRef()->draw(text3);
+                app.getMainWindowRef()->draw(text4);
+                app.getMainWindowRef()->draw(textStart);
+                app.getMainWindowRef()->draw(textReset);
+                app.getMainWindowRef()->draw(textInfo);
+                app.getMainWindowRef()->draw(textRandom);
+                
+            }
 
 
             app.displayInterface();
