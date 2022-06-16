@@ -12,8 +12,13 @@ g++ -std=c++11 main-visual.cpp -I /usr/local/Cellar/sfml/2.5.1_1/include -L /usr
 
 ## BFS
 
-<img src="demos/bfs-demo.gif" width=640 height = 640 hspace = 5/>
+<img src="demos/BFS-demo.gif" width=640 height = 640 hspace = 5/>
 
 ## DFS
 
-<img src="demos/dfs-demo.gif" width=640 height = 640 hspace = 5/>
+<img src="demos/DFS-demo.gif" width=640 height = 640 hspace = 5/>
+
+
+## A-Star
+
+<img src="demos/AStar-Demo.gif" width=640 height = 640 hspace = 5/>
