@@ -13,7 +13,10 @@ using std::cout, std::endl, std::string;
 
 
 // TODO
-// Fix being trapped in the corner with 90 degree wall???
+// Fix being trapped in the corner with 90 degree wall??? (track and fix hovering) 
+
+// Draw the PATH in different textures
+
 
 
 struct exlporedAStar{

@@ -20,12 +20,11 @@ using namespace std;
 
 #include "Application.hpp"
 
-// FIX: Button rendering seg. fault if encapsulated in a manager class (Pointers likely)
 
 
 // TODO:
 
-// 
+// Persistent Estimator Board for AStar
 
 // 4. Verify BFS & DFS
 // Verify AStar
@@ -34,13 +33,20 @@ using namespace std;
 
 // Add CMake functionality
 
+// Change and review all colour textures to better quality
+
+// FIX: Button rendering seg. fault if encapsulated in a manager class (Pointers likely)
+
+
 
 // DOING:
-// Random Walls Generation
 // OOP!
 // Application class
 // Interface (Add components)
 
+
+
+///////////////////////////////////////////////////
 
 // DONE:
 
@@ -51,6 +57,9 @@ using namespace std;
 // FIX THE WALLS BEING IGNORED & OVERWRITTEN! -> New objects created on stack produced a problem (copies located in a vector => No reference to actual object)
 // 1. !! Decide on & implement the final interface !!
 // 2. Implement Algorithm Selection AND proper restart feature
+// Random Walls Generation 
+
+///////////////////////////////////////////////////
 
 
 int main()
@@ -187,6 +196,7 @@ int main()
                 }
                 // Choose DFS
                 else if(xPos >= 200 && xPos <= 285 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
+
                     text1.setColor(sf::Color(169,169,169));
                     text3.setColor(sf::Color(169,169,169));
                     text4.setColor(sf::Color(169,169,169));
@@ -198,6 +208,7 @@ int main()
 
                 // Choose AStar
                 else if(xPos >= 330 && xPos <= 380 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
+
                     text1.setColor(sf::Color(169,169,169));
                     text2.setColor(sf::Color(169,169,169));
                     text4.setColor(sf::Color(169,169,169));
@@ -210,10 +221,34 @@ int main()
                 }
 
                 // TODO: Handle persistent display of computed (post start&finish flags)
-                // Chebushev
-                // Manhattan
-                // Euclidian
                 // Ensure reset/combinations work
+
+                // Replace The board cells
+
+                // Euclidian
+                else if(xPos >= 460 && xPos <= 646 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
+
+                    textEuc.setColor(sf::Color::Yellow);
+                    textManh.setColor(sf::Color(169,169,169));
+                    textCheb.setColor(sf::Color(169,169,169));
+                    app.getStateRef()->astarModeSetting = 0;
+                }
+
+                // Manhattan
+                else if(xPos >= 700 && xPos <= 920 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
+                    textEuc.setColor(sf::Color(169,169,169));
+                    textCheb.setColor(sf::Color(169,169,169));
+                    textManh.setColor(sf::Color::Yellow);
+                    app.getStateRef()->astarModeSetting = 1;
+                }
+
+                // Chebushev
+                else if(xPos >= 970 && xPos <= 1200 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
+                    textManh.setColor(sf::Color(169,169,169));
+                    textEuc.setColor(sf::Color(169,169,169));
+                    textCheb.setColor(sf::Color::Yellow);
+                    app.getStateRef()->astarModeSetting = 2;
+                }
 
 
                 // Pressed Reset 
@@ -221,6 +256,8 @@ int main()
 
                     // Performs full State Reset on loop exit
                     // Move into an App class
+
+                    // !!! REPEATED CODE !!!
 
                     app.getStateRef()->isResetPressed = true;
 
@@ -235,18 +272,56 @@ int main()
 
                 // Pressed Random Map
                 else if(xPos >= 1300 && xPos <= 1580 && yPos >= 12 && yPos <= 57){
+                    
                     textReset.setColor(sf::Color(169,169,169));
+
+
+                    if(app.getStateRef()->isRandomMap == true){
+
+                        // Window reset (!!! REPEATED code !!!)
+
+                        for(int i = 0; i < app.getboardRef()->size(); i++){
+                            app.getboardRef()->at(i)->resetAttributes();
+                            app.getboardRef()->at(i)->setTexture("../assets-static/node-empty.jpg");
+                            app.getboardRef()->at(i)->setScore(-1, i);
+                            app.getboardRef()->at(i)->render(app.getMainWindowRef());
+                        }
+
+                    }
+
 
                     app.getStateRef()->isRandomMap = true;
                     
+                    random_device randomNum;
+
                     // Generate Random walls
                     // 
+                    for(int i = 0; i < app.getboardRef()->size(); i++){
+
+                        if(app.getboardRef()->at(i)->checkIsStart() || app.getboardRef()->at(i)->checkIsTarget()){
+                            continue;
+                        }
+
+                        int randomSeed = randomNum();
+                        cout<<"Seed number is: "<<randomSeed<<endl;
+                        // Example of Random decision...
+                        if(randomSeed % 3 == 0){
+
+                            app.getboardRef()->at(i)->setWall();
+                            app.getboardRef()->at(i)->setTexture("../assets-static/node-wall.jpg");
+                            app.getboardRef()->at(i)->render(app.getMainWindowRef());
+
+                        }
+
+                    }
+
+                    app.getMainWindowRef()->display();
+
                 }
 
                 // Handle mouse presses all over the interface (out of bounds)
                 // With or without the key pressed
-                // else if(){
-
+                // else if(xPos){
                 // }
 
                 // Calculate the Cell index & replace
@@ -344,7 +419,6 @@ int main()
 
                 // Full state Reset on Reset Button Press
 
-                // return EXIT_SUCCESS;
             }
 
             if(app.getStateRef()->isFinishSet == true && app.getStateRef()->depthFirstSearch == true && app.getStateRef()->isStartPressed){
@@ -361,24 +435,27 @@ int main()
 
                 // Full state reset on Reset Button press
 
-                // return EXIT_SUCCESS;
             }
 
-            if(app.getStateRef()->isFinishSet == true && app.getStateRef()->aStar == true && app.getStateRef()->isStartPressed){
+            if(app.getStateRef()->isFinishSet == true && app.getStateRef()->aStar == true){
 
                 // Initialize the Graph and pass it to the algorithm
                 // Pass the reference to the window
                 // Further Graph updates and rendering done within the algorithm
 
-                GraphWeighted graph(app.getboardRef(), app.getMainWindowRef(), startIdx, 20, endIdx);
-                bool SearchResult = AStar(&graph, app.getMainWindowRef());
+                GraphWeighted graph(app.getboardRef(), app.getMainWindowRef(), startIdx, 20, endIdx, app.getStateRef()->astarModeSetting);
 
-                app.getStateRef()->aStar = false;
+                // Resolve the Heuristic mode for A*
 
+                if(app.getStateRef()->isStartPressed){
+
+                    bool SearchResult = AStar(&graph, app.getMainWindowRef());
+
+                    app.getStateRef()->aStar = false;
+                }
 
                 // Full state reset on Reset Button press
 
-                // return EXIT_SUCCESS;
             }
 
 
@@ -386,26 +463,17 @@ int main()
             if(app.getStateRef()->isResetPressed){
                 // Perform full Application state reset
 
-                    // breadthFirstSearch = false;
-                    // depthFirstSearch = false;
-
-                    // isStartSet = false;
-                    // isFinishSet = false;
-
-                    // isAlgoChosen = false;
-                    // isStartPressed = false;
-                    // isRandomMap = false;
-                    // isResetPressed = false; 
-
+                    // Resets Application state variables
                     app.resetState();
 
                     for(int i = 0; i < app.getboardRef()->size(); i++){
                         app.getboardRef()->at(i)->resetAttributes();
                         app.getboardRef()->at(i)->setTexture("../assets-static/node-empty.jpg");
+                        app.getboardRef()->at(i)->setScore(-1, i);
                         app.getboardRef()->at(i)->render(app.getMainWindowRef());
                     }
 
-                    
+
                     text1.setColor(sf::Color::Yellow);
                     text2.setColor(sf::Color::Yellow);
                     text3.setColor(sf::Color::Yellow);
@@ -414,6 +482,10 @@ int main()
                     textReset.setColor(sf::Color::Yellow);
                     textInfo.setColor(sf::Color::Yellow);
                     textRandom.setColor(sf::Color::Yellow);
+
+                    textCheb.setColor(sf::Color::Yellow);
+                    textManh.setColor(sf::Color::Yellow);
+                    textEuc.setColor(sf::Color::Yellow);
 
 
                     app.getMainWindowRef()->draw(text1);
@@ -426,8 +498,7 @@ int main()
                     app.getMainWindowRef()->draw(textRandom);
 
 
-                    app.getMainWindowRef()->display();
-    
+                    app.getMainWindowRef()->display();    
 
                     break;
 

@@ -98,6 +98,11 @@ class mapCell : public Sprite2DComponent{
 
         void setScore(int score, int idx){
 
+            if(score == -1){
+                scoreLabel.setString("");
+                return;
+            }
+    
             scoreLabel.setString(to_string(score));
             scoreLabel.setFont(this->font);
             scoreLabel.setCharacterSize(40);
