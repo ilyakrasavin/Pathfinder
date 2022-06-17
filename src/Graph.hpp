@@ -336,6 +336,7 @@ void Graph::setStartIdx(int idx){
     this->startIdx = idx;
 }
 
+
 Graph::~Graph(){
 
     for(auto node: nodeMatrix){
