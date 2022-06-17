@@ -24,12 +24,14 @@ using namespace std;
 
 // TODO:
 
-// Persistent Estimator Board for AStar
+// DJkstra
 
-// 4. Verify BFS & DFS
+// Verify BFS & DFS
 // Verify AStar
 
-// DJkstra
+// REPLACE Repeated code (State resets / window rendering loops etc.)
+
+// Fix AStar being trapped by a 90 degree wall
 
 // Add CMake functionality
 
@@ -37,13 +39,12 @@ using namespace std;
 
 // FIX: Button rendering seg. fault if encapsulated in a manager class (Pointers likely)
 
+// FIX All warnings. They are potential errors
 
 
 // DOING:
-// OOP!
 // Application class
 // Interface (Add components)
-
 
 
 ///////////////////////////////////////////////////
@@ -58,6 +59,8 @@ using namespace std;
 // 1. !! Decide on & implement the final interface !!
 // 2. Implement Algorithm Selection AND proper restart feature
 // Random Walls Generation 
+// Persistent Estimator Board for AStar
+
 
 ///////////////////////////////////////////////////
 
@@ -80,7 +83,9 @@ int main()
     sf::Clock clock;
 
 
-    // TODO: Buttons inaccessible if encapsulated. 
+    // TODO: Buttons inaccessible if encapsulated.
+    // 1: Keep as is in the separate header file
+    // 2: Attempt to add into Application manager class  
     /////////////////////////////////////////////////////////////
 
     sf::Font font;
@@ -134,23 +139,8 @@ int main()
 
     ///////////////////////////////////////////////
 
-    // Application State variables (To be moved into App class)
-
-    bool isStartSet = false;
-    bool isFinishSet = false;
-
     int startIdx = 0;
     int endIdx = 0;
-
-    bool breadthFirstSearch = false;
-    bool depthFirstSearch = false;
-    bool aStar = false;
-    bool djkstra = false;
-
-    bool isAlgoChosen = false;
-    bool isStartPressed = false;
-    bool isRandomMap = false;
-    bool isResetPressed = false;    
 
 
     // Rendering Window Outer loop
@@ -459,7 +449,7 @@ int main()
             }
 
 
-            // Put into App class
+            // Encapsulate functionality into Applciation class instead
             if(app.getStateRef()->isResetPressed){
                 // Perform full Application state reset
 
