@@ -35,8 +35,15 @@ Applications of presented algorithms are widely spread in the areas such as: Gam
 
 ## Djkstra (WIP)
 
+## UCS
+
 
 # Repository Contents:
+
+├── assets-static
+├── demos
+└── src
+    ├── Algorithms
 
 
 # Building & Compiling (MacOS)

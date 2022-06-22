@@ -88,6 +88,7 @@
         "variant": "cpp",
         "memory_resource": "cpp",
         "stop_token": "cpp",
-        "cfenv": "cpp"
+        "cfenv": "cpp",
+        "filesystem": "cpp"
     }
 }
