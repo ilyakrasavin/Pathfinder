@@ -4,6 +4,11 @@
 
 #include <cmath>
 
+#include <iostream>
+
+using std::shared_ptr, std::string, std::cout, std::endl, std::pair, std::to_string;
+
+
 // Base Interface for all components
 class IComponent{
 
@@ -35,7 +40,7 @@ class Sprite2DComponent : public IComponent{
             m_sprite.setPosition(x, y);
         }
 
-        virtual void render(shared_ptr<sf::RenderWindow> ref) override{
+        virtual void render(std::shared_ptr<sf::RenderWindow> ref) override{
             ref->draw(m_sprite);
         }
 
@@ -151,48 +156,48 @@ class mapCell : public Sprite2DComponent{
 
 
 
-class Button: public Sprite2DComponent{
+// class Button: public Sprite2DComponent{
 
-    public:
+//     public:
 
-        Button(sf::Color colour, sf::Font font, string text, pair<int, int> pos);
+//         Button(sf::Color colour, sf::Font font, string text, pair<int, int> pos);
 
-        void setInactive();
-        void setActive();
+//         void setInactive();
+//         void setActive();
 
-        string getString(){return button.getString();}
+//         string getString(){return button.getString();}
 
-        void render(shared_ptr<sf::RenderWindow> ref){
-            ref->draw(this->button);
-        }
+//         void render(shared_ptr<sf::RenderWindow> ref){
+//             ref->draw(this->button);
+//         }
 
-        sf::Text getButton(){return button;}
+//         sf::Text getButton(){return button;}
 
-        ~Button(){}
+//         ~Button(){}
 
-    private:
+//     private:
 
-        bool isActive;
-        bool isInactive;
+//         bool isActive;
+//         bool isInactive;
 
-        sf::Text button;
+//         sf::Text button;
 
-};
+// };
 
 
-Button::Button(sf::Color colour, sf::Font font, string text, pair<int, int> pos){
+// Button::Button(sf::Color colour, sf::Font font, string text, std::pair<int, int> pos){
     
-    this->button = sf::Text(text, font, 45);
-    this->button.setColor(colour);
-    this->button.setPosition(sf::Vector2f(pos.first, pos.second));
+//     this->button = sf::Text(text, font, 45);
+//     this->button.setColor(colour);
+//     this->button.setPosition(sf::Vector2f(pos.first, pos.second));
 
-    isActive = true;
-    isInactive = false;
+//     isActive = true;
+//     isInactive = false;
 
-}
+// }
 
-void Button::setActive(){}
-void Button::setInactive(){}
+// void Button::setActive(){}
+// void Button::setInactive(){}
 
 
 #endif
