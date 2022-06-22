@@ -1,0 +1,1 @@
+// Finds the shortest path to a given node via accumulated cost (Uninformed)
