@@ -1,6 +1,4 @@
 
-using namespace std;
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
@@ -12,14 +10,17 @@ using namespace std;
 
 #include "Interface.hpp"
 #include "Graph.hpp"
+#include "GraphWeighted.hpp"
 
+#include "Application.hpp"
+#include "textButtons.hpp"
 
 #include "Algorithms/BFS.hpp"
 #include "Algorithms/DFS.hpp"
 #include "Algorithms/A-Star.hpp"
 
-#include "Application.hpp"
 
+using std::string, std::cout, std::endl, std::shared_ptr;
 
 
 // TODO:
@@ -42,11 +43,6 @@ using namespace std;
 // FIX All warnings. They are potential errors
 
 
-// DOING:
-// Application class
-// Interface (Add components)
-
-
 ///////////////////////////////////////////////////
 
 // DONE:
@@ -65,83 +61,12 @@ using namespace std;
 ///////////////////////////////////////////////////
 
 
+
 int main()
 {
 
     Application app("Pathfinder");
-
-
-    // // Main Rendering Window
-    // sf::RenderWindow window(sf::VideoMode(1600, 1600), "Pathfinder");
-    // window.setFramerateLimit(60);
-
-
-    // Mouse Release Check
-    bool mouseReleased = false;
-
-    // Frame Rate Setup
-    sf::Clock clock;
-
-
-    // TODO: Buttons inaccessible if encapsulated.
-    // 1: Keep as is in the separate header file
-    // 2: Attempt to add into Application manager class  
-    /////////////////////////////////////////////////////////////
-
-    sf::Font font;
-    font.loadFromFile("../assets-static/Raleway-Regular.ttf");
-
-    sf::Text text1("BFS", font, 45);
-    text1.setColor(sf::Color::Yellow);
-    text1.setPosition(80, 12);
-
-    sf::Text text2("DFS", font, 45);
-    text2.setColor(sf::Color::Yellow);
-    text2.setPosition(200,12);
-
-
-    sf::Text text3("A*", font, 45);
-    text3.setColor(sf::Color::Yellow);
-    text3.setPosition(330,12);
-
-    sf::Text text4("Djkstra", font, 45);
-    text4.setColor(sf::Color::Yellow);
-    text4.setPosition(420,12);
-
-    sf::Text textEuc("Euclidian", font, 45);
-    textEuc.setColor(sf::Color::Yellow);
-    textEuc.setPosition(460,12);
-
-    sf::Text textManh("Manhattan", font, 45);
-    textManh.setColor(sf::Color::Yellow);
-    textManh.setPosition(700,12);
-
-    sf::Text textCheb("Chebushev", font, 45);
-    textCheb.setColor(sf::Color::Yellow);
-    textCheb.setPosition(970,12);
-
-    sf::Text textStart("Start", font, 45);
-    textStart.setColor(sf::Color::Yellow);
-    textStart.setPosition(80,1490);
-
-
-    sf::Text textReset("Reset", font, 45);
-    textReset.setColor(sf::Color::Yellow);
-    textReset.setPosition(220,1490);
-
-    sf::Text textRandom("Random Map", font, 45);
-    textRandom.setColor(sf::Color::Yellow);
-    textRandom.setPosition(1300,12);
-
-    sf::Text textInfo("Hold 'W' to set the Walls (Or press Random)\nHold 'S' to set the Start\nHold 'F' to set the Target\nPress Esc to exit at any time", font, 30);
-    textInfo.setColor(sf::Color::Yellow);
-    textInfo.setPosition(920, 1448);
-
-    ///////////////////////////////////////////////
-
-    int startIdx = 0;
-    int endIdx = 0;
-
+    Application* appRef = &app;
 
     // Rendering Window Outer loop
     while (app.getMainWindowRef()->isOpen())
@@ -153,13 +78,8 @@ int main()
         
         while (app.getMainWindowRef()->pollEvent(event))
         {
-            // Compute the frame rate:
-            float secCurrent = clock.restart().asSeconds();
-            float fps = 1.0f / secCurrent;
 
-            cout<<"FPS: "<<fps<<endl;
-
-            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
+            if(event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
                 app.getMainWindowRef()->close();
             }
 
@@ -170,26 +90,25 @@ int main()
 
                 int xPos = sf::Mouse::getPosition(*app.getMainWindowRef()).x;
                 int yPos = sf::Mouse::getPosition(*app.getMainWindowRef()).y;
-                cout<<xPos<<endl;
-                cout<<yPos<<endl;
 
                 // Choose BFS
                 if(xPos >= 80 && xPos <= 160 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
 
-                    text2.setColor(sf::Color(169,169,169));
-                    text3.setColor(sf::Color(169,169,169));
-                    text4.setColor(sf::Color(169,169,169));
+                    textDFS.setColor(sf::Color(169,169,169));
+                    textAStar.setColor(sf::Color(169,169,169));
+                    textDjkstra.setColor(sf::Color(169,169,169));
 
                     app.getStateRef()->breadthFirstSearch = true;
                     app.getStateRef()->isAlgoChosen = true;
 
                 }
+
                 // Choose DFS
                 else if(xPos >= 200 && xPos <= 285 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
 
-                    text1.setColor(sf::Color(169,169,169));
-                    text3.setColor(sf::Color(169,169,169));
-                    text4.setColor(sf::Color(169,169,169));
+                    textBFS.setColor(sf::Color(169,169,169));
+                    textAStar.setColor(sf::Color(169,169,169));
+                    textDjkstra.setColor(sf::Color(169,169,169));
 
                     app.getStateRef()->depthFirstSearch = true;
                     app.getStateRef()->isAlgoChosen = true;
@@ -199,9 +118,9 @@ int main()
                 // Choose AStar
                 else if(xPos >= 330 && xPos <= 380 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
 
-                    text1.setColor(sf::Color(169,169,169));
-                    text2.setColor(sf::Color(169,169,169));
-                    text4.setColor(sf::Color(169,169,169));
+                    textBFS.setColor(sf::Color(169,169,169));
+                    textDFS.setColor(sf::Color(169,169,169));
+                    textDjkstra.setColor(sf::Color(169,169,169));
                     
                     app.getStateRef()->aStar = true;
                     app.getStateRef()->isAlgoChosen = true;
@@ -210,12 +129,7 @@ int main()
 
                 }
 
-                // TODO: Handle persistent display of computed (post start&finish flags)
-                // Ensure reset/combinations work
-
-                // Replace The board cells
-
-                // Euclidian
+                // AStar: Euclidian
                 else if(xPos >= 460 && xPos <= 646 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
 
                     textEuc.setColor(sf::Color::Yellow);
@@ -224,7 +138,7 @@ int main()
                     app.getStateRef()->astarModeSetting = 0;
                 }
 
-                // Manhattan
+                // AStar: Manhattan
                 else if(xPos >= 700 && xPos <= 920 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
                     textEuc.setColor(sf::Color(169,169,169));
                     textCheb.setColor(sf::Color(169,169,169));
@@ -232,7 +146,7 @@ int main()
                     app.getStateRef()->astarModeSetting = 1;
                 }
 
-                // Chebushev
+                // AStar: Chebushev
                 else if(xPos >= 970 && xPos <= 1200 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
                     textManh.setColor(sf::Color(169,169,169));
                     textEuc.setColor(sf::Color(169,169,169));
@@ -241,15 +155,18 @@ int main()
                 }
 
 
-                // Pressed Reset 
+                // Reset Pressed 
                 else if(xPos >= 220 && xPos <= 340 && yPos >= 1490 && yPos <= 1535){
 
                     // Performs full State Reset on loop exit
-                    // Move into an App class
+                    app.resetState();
+                    app.resetBoard();
 
-                    // !!! REPEATED CODE !!!
+                    app.drawMenu();
 
-                    app.getStateRef()->isResetPressed = true;
+                    app.displayInterface();
+
+                    break;
 
                 }
 
@@ -263,29 +180,23 @@ int main()
                 // Pressed Random Map
                 else if(xPos >= 1300 && xPos <= 1580 && yPos >= 12 && yPos <= 57){
                     
-                    textReset.setColor(sf::Color(169,169,169));
+                    // Reset Field Only
+                    for(int i = 0; i < app.getboardRef()->size(); i++){
 
-
-                    if(app.getStateRef()->isRandomMap == true){
-
-                        // Window reset (!!! REPEATED code !!!)
-
-                        for(int i = 0; i < app.getboardRef()->size(); i++){
-                            app.getboardRef()->at(i)->resetAttributes();
-                            app.getboardRef()->at(i)->setTexture("../assets-static/node-empty.jpg");
-                            app.getboardRef()->at(i)->setScore(-1, i);
-                            app.getboardRef()->at(i)->render(app.getMainWindowRef());
+                        if(app.getboardRef()->at(i)->checkIsStart() || app.getboardRef()->at(i)->checkIsTarget()){
+                            continue;
                         }
 
+                        app.getboardRef()->at(i)->resetAttributes();
+                        app.getboardRef()->at(i)->setTexture("../assets-static/node-empty.jpg");
+                        app.getboardRef()->at(i)->setScore(-1, i);
+                        app.getboardRef()->at(i)->render(app.getMainWindowRef());
                     }
-
 
                     app.getStateRef()->isRandomMap = true;
                     
-                    random_device randomNum;
-
                     // Generate Random walls
-                    // 
+                    random_device randomNum;
                     for(int i = 0; i < app.getboardRef()->size(); i++){
 
                         if(app.getboardRef()->at(i)->checkIsStart() || app.getboardRef()->at(i)->checkIsTarget()){
@@ -293,7 +204,7 @@ int main()
                         }
 
                         int randomSeed = randomNum();
-                        cout<<"Seed number is: "<<randomSeed<<endl;
+                        
                         // Example of Random decision...
                         if(randomSeed % 3 == 0){
 
@@ -305,7 +216,7 @@ int main()
 
                     }
 
-                    app.getMainWindowRef()->display();
+                    app.displayInterface();
 
                 }
 
@@ -326,7 +237,7 @@ int main()
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F) && !app.getStateRef()->isFinishSet){
 
-                    endIdx = cellIdx;
+                    app.getStateRef()->tgtIdx = cellIdx;
 
                     app.getStateRef()->isFinishSet = true;
 
@@ -337,7 +248,7 @@ int main()
                     cout<<"Finish is set at position: "<<cellIdx<<endl;
                 }
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && !app.getStateRef()->isStartSet){
-                    startIdx = cellIdx;
+                    app.getStateRef()->startIdx = cellIdx;
 
                     app.getStateRef()->isStartSet = true;
 
@@ -359,84 +270,41 @@ int main()
 
 
             app.renderInterface();
-
-
             if(app.getStateRef()->astarMode){
-                app.getMainWindowRef()->draw(textEuc);
-                app.getMainWindowRef()->draw(textManh);
-                app.getMainWindowRef()->draw(textCheb);
-
-                app.getMainWindowRef()->draw(text3);
-                app.getMainWindowRef()->draw(textStart);
-                app.getMainWindowRef()->draw(textReset);
-                app.getMainWindowRef()->draw(textInfo);
-                app.getMainWindowRef()->draw(textRandom);
-
+                app.drawMenuAStar();
             }
             else{
-
-                app.getMainWindowRef()->draw(text1);
-                app.getMainWindowRef()->draw(text2);
-                app.getMainWindowRef()->draw(text3);
-                app.getMainWindowRef()->draw(text4);
-                app.getMainWindowRef()->draw(textStart);
-                app.getMainWindowRef()->draw(textReset);
-                app.getMainWindowRef()->draw(textInfo);
-                app.getMainWindowRef()->draw(textRandom);
-                
+                app.drawMenu();
             }
-
-
             app.displayInterface();
-
-
-            cout<<"START INDEX IS: "<<startIdx<<endl;
 
 
             if(app.getStateRef()->isFinishSet == true && app.getStateRef()->breadthFirstSearch == true && app.getStateRef()->isStartPressed){
 
-                // Initialize the Graph and pass it to the algorithm
-                // Pass the reference to the window
-                // Further Graph updates and rendering done within the algorithm
+                Graph graph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20);
+                app.setGraph(&graph);
 
-                vector<shared_ptr<mapCell>>* boardRef = (vector<shared_ptr<mapCell>>*)app.getboardRef();
-
-                Graph graph(app.getboardRef(), app.getMainWindowRef(), startIdx, 20);
-
-                bool SearchResult = BreadthFirstSearch(&graph, app.getMainWindowRef());
+                BreadthFirstSearch(&graph, app.getMainWindowRef());
 
                 app.getStateRef()->breadthFirstSearch = false;
-
-                // Full state Reset on Reset Button Press
 
             }
 
             if(app.getStateRef()->isFinishSet == true && app.getStateRef()->depthFirstSearch == true && app.getStateRef()->isStartPressed){
 
-                // Initialize the Graph and pass it to the algorithm
-                // Pass the reference to the window
-                // Further Graph updates and rendering done within the algorithm
-
-                Graph graph(app.getboardRef(), app.getMainWindowRef(), startIdx, 20);
-                bool SearchResult = DepthFirstSearch(&graph, app.getMainWindowRef());
+                Graph graph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20);
+                
+                DepthFirstSearch(&graph, app.getMainWindowRef());
 
                 app.getStateRef()->depthFirstSearch = false;
-
-
-                // Full state reset on Reset Button press
 
             }
 
             if(app.getStateRef()->isFinishSet == true && app.getStateRef()->aStar == true){
 
-                // Initialize the Graph and pass it to the algorithm
-                // Pass the reference to the window
-                // Further Graph updates and rendering done within the algorithm
-
-                GraphWeighted graph(app.getboardRef(), app.getMainWindowRef(), startIdx, 20, endIdx, app.getStateRef()->astarModeSetting);
+                GraphWeighted graph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20, app.getStateRef()->tgtIdx, app.getStateRef()->astarModeSetting);
 
                 // Resolve the Heuristic mode for A*
-
                 if(app.getStateRef()->isStartPressed){
 
                     bool SearchResult = AStar(&graph, app.getMainWindowRef());
@@ -444,57 +312,20 @@ int main()
                     app.getStateRef()->aStar = false;
                 }
 
-                // Full state reset on Reset Button press
-
             }
 
+            // if(app.getStateRef()->isResetPressed){
 
-            // Encapsulate functionality into Applciation class instead
-            if(app.getStateRef()->isResetPressed){
-                // Perform full Application state reset
+            //     // Resets Application state variables / Board Textures & Attributes
+            //     app.resetState();
+            //     app.resetBoard();
 
-                    // Resets Application state variables
-                    app.resetState();
+            //     app.drawMenu();
 
-                    for(int i = 0; i < app.getboardRef()->size(); i++){
-                        app.getboardRef()->at(i)->resetAttributes();
-                        app.getboardRef()->at(i)->setTexture("../assets-static/node-empty.jpg");
-                        app.getboardRef()->at(i)->setScore(-1, i);
-                        app.getboardRef()->at(i)->render(app.getMainWindowRef());
-                    }
+            //     app.displayInterface();
 
-
-                    text1.setColor(sf::Color::Yellow);
-                    text2.setColor(sf::Color::Yellow);
-                    text3.setColor(sf::Color::Yellow);
-                    text4.setColor(sf::Color::Yellow);
-                    textStart.setColor(sf::Color::Yellow);
-                    textReset.setColor(sf::Color::Yellow);
-                    textInfo.setColor(sf::Color::Yellow);
-                    textRandom.setColor(sf::Color::Yellow);
-
-                    textCheb.setColor(sf::Color::Yellow);
-                    textManh.setColor(sf::Color::Yellow);
-                    textEuc.setColor(sf::Color::Yellow);
-
-
-                    app.getMainWindowRef()->draw(text1);
-                    app.getMainWindowRef()->draw(text2);
-                    app.getMainWindowRef()->draw(text3);
-                    app.getMainWindowRef()->draw(text4);
-                    app.getMainWindowRef()->draw(textStart);
-                    app.getMainWindowRef()->draw(textReset);
-                    app.getMainWindowRef()->draw(textInfo);
-                    app.getMainWindowRef()->draw(textRandom);
-
-
-                    app.getMainWindowRef()->display();    
-
-                    break;
-
-            }
-
-
+            //     break;
+            // }
 
         }
 
