@@ -1,9 +1,12 @@
 #include "DFS.hpp"
 
+bool DepthFirstSearch(Application* appControls){
 
-bool DepthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef){
+    shared_ptr<Node> startNode = appControls->getGraphRef()->getStartNode();
+    std::vector<std::shared_ptr<Node>> nodeMatrixLocal = appControls->getGraphRef()->nodeMatrix;
+    std::shared_ptr<sf::RenderWindow> windowRef = appControls->getMainWindowRef();
 
-    shared_ptr<Node> startNode = graph->getStartNode();
+
     stack<shared_ptr<Node>> toExplore;
 
     toExplore.push(startNode);
@@ -27,10 +30,14 @@ bool DepthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef){
 
         }
 
-        for(auto each: graph->nodeMatrix){
+        for(auto each: nodeMatrixLocal){
             each->getCellRef()->render(windowRef);
         }
-        windowRef->display();
+
+        // appControls->renderCells();
+        appControls->displayInterface();
+
+        // windowRef->display();
 
 
         if(temp->isTarget()){

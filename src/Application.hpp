@@ -7,9 +7,6 @@
 #include "Graph.hpp"
 #include "GraphWeighted.hpp"
 
-#include "Algorithms/A-Star.hpp"
-#include "Algorithms/BFS.hpp"
-#include "Algorithms/DFS.hpp"
 
 #include <memory>
 
@@ -61,6 +58,7 @@ class Application{
         void mainFrameRate(const int limit);
 
         const void renderInterface() const;
+        const void renderCells() const;
         const void displayInterface() const;
 
         const void drawMenu() const;
@@ -85,6 +83,11 @@ class Application{
 
         void setGraph(Graph* graphRef);
         void setWGraph(GraphWeighted* graphWRef);
+
+    public:
+        void runDFS() const;
+        void runBFS() const;
+        void runAStar() const;
 
     private:
 

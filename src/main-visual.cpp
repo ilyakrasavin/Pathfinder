@@ -15,9 +15,6 @@
 #include "Application.hpp"
 #include "textButtons.hpp"
 
-#include "Algorithms/BFS.hpp"
-#include "Algorithms/DFS.hpp"
-#include "Algorithms/A-Star.hpp"
 
 
 using std::string, std::cout, std::endl, std::shared_ptr;
@@ -42,6 +39,7 @@ using std::string, std::cout, std::endl, std::shared_ptr;
 
 // FIX All warnings. They are potential errors
 
+// FIX DFS stale finish close to start (Neighbour expansion and removal order?)
 
 ///////////////////////////////////////////////////
 
@@ -257,7 +255,6 @@ int main()
                     app.getboardRef()->at(cellIdx)->setTexture("../assets-static/node-start.jpg");
                     app.getboardRef()->at(cellIdx)->setStart();
 
-
                 }
                 else{
                     continue;
@@ -284,7 +281,8 @@ int main()
                 Graph graph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20);
                 app.setGraph(&graph);
 
-                BreadthFirstSearch(&graph, app.getMainWindowRef());
+                app.runBFS();
+                // BreadthFirstSearch(appRef);
 
                 app.getStateRef()->breadthFirstSearch = false;
 
@@ -293,8 +291,9 @@ int main()
             if(app.getStateRef()->isFinishSet == true && app.getStateRef()->depthFirstSearch == true && app.getStateRef()->isStartPressed){
 
                 Graph graph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20);
+                app.setGraph(&graph);
                 
-                DepthFirstSearch(&graph, app.getMainWindowRef());
+                app.runDFS();
 
                 app.getStateRef()->depthFirstSearch = false;
 
@@ -302,12 +301,13 @@ int main()
 
             if(app.getStateRef()->isFinishSet == true && app.getStateRef()->aStar == true){
 
-                GraphWeighted graph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20, app.getStateRef()->tgtIdx, app.getStateRef()->astarModeSetting);
+                GraphWeighted WGraph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20, app.getStateRef()->tgtIdx, app.getStateRef()->astarModeSetting);
+                app.setWGraph(&WGraph);
 
                 // Resolve the Heuristic mode for A*
                 if(app.getStateRef()->isStartPressed){
 
-                    bool SearchResult = AStar(&graph, app.getMainWindowRef());
+                    app.runAStar();
 
                     app.getStateRef()->aStar = false;
                 }

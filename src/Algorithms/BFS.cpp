@@ -1,12 +1,15 @@
 #include "BFS.hpp"
 
-bool BreadthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef){
+
+bool BreadthFirstSearch(Application* appControls){
 // ASSURE no retraction is happenning (No backwards exporation -> Nodes marked visited)
 
     cout<<"Entered BFS"<<endl;
 
-    // Begin with the Start Node
-    shared_ptr<Node> currentNode = graph->getStartNode();
+    // Retrieve Graph Attributes and keep Locally
+    shared_ptr<Node> currentNode = appControls->getGraphRef()->getStartNode();
+    // std::vector<std::shared_ptr<Node>> nodeMatrixLocal = appControls->getGraphRef()->nodeMatrix;
+    // std::shared_ptr<sf::RenderWindow> windowRef = appControls->getMainWindowRef();
 
     vector<shared_ptr<Node>> explored;
     queue<shared_ptr<Node>> children_queue;
@@ -334,12 +337,8 @@ bool BreadthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef){
         cout<<"Nodes explored: "<<explored.size()<<endl;
 
         // Render the board cells ONLY
-        for(auto each: graph->nodeMatrix){
-            each->getCellRef()->render(windowRef);
-        }
-
-        windowRef->display();
-
+        appControls->renderCells();
+        appControls->displayInterface();
 
 
         // Queue is empty! Done

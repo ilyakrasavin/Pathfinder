@@ -7,10 +7,12 @@
 
 #include "../GraphWeighted.hpp"
 
+#include "../Application.hpp"
+
 using std::cout, std::string, std::vector;
 
 
 
-bool AStar(GraphWeighted* graph, shared_ptr<sf::RenderWindow> windowRef);
+bool AStar(Application* appControls);
 
 #endif

@@ -21,9 +21,9 @@ struct CompareFScore {
 };
 
 
-bool AStar(GraphWeighted* graph, shared_ptr<sf::RenderWindow> windowRef){
+bool AStar(Application* appControls){
 
-    shared_ptr<NodeExp> startNode = graph->getStartNode();
+    shared_ptr<NodeExp> startNode = appControls->getWGraphRef()->getStartNode();
 
     // Explore the element with (( Lowest Cost (Distance) + Heuristic Measure ))
 
@@ -43,7 +43,7 @@ bool AStar(GraphWeighted* graph, shared_ptr<sf::RenderWindow> windowRef){
     // Used to traceBack the path
     vector<exlporedAStar> traceback;
 
-    for(int i = 0; i < graph->getMatrixSize(); i++){
+    for(int i = 0; i < appControls->getWGraphRef()->getMatrixSize(); i++){
         exploredNodesIdx.push_back(0);
         openNodesIdx.push_back(0);
         exlporedAStar newExplored;
@@ -54,6 +54,7 @@ bool AStar(GraphWeighted* graph, shared_ptr<sf::RenderWindow> windowRef){
 
     }
 
+    cout<<"Traceback Array Filled"<<endl;
 
     // Not found on empty list
     while(openNodes.size() > 0){
@@ -164,10 +165,8 @@ bool AStar(GraphWeighted* graph, shared_ptr<sf::RenderWindow> windowRef){
         	exploredNodesIdx[currentNode->getIdx()] = 1;
 
 
-            for(auto each: graph->nodeMatrix){
-                each->getCellRef()->render(windowRef);
-            }
-            windowRef->display();
+            appControls->renderCells();
+            appControls->displayInterface();
 
         }
 

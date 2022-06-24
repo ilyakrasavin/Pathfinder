@@ -5,14 +5,14 @@
 #include <queue>
 #include <iostream>
 
+#include "../Application.hpp"
+
 #include "../Graph.hpp"
 
 using namespace std;
 
 
-// Add App reference for cleaner state controls
-
-bool BreadthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef);
+bool BreadthFirstSearch(Application* appControls);
 
 
 #endif

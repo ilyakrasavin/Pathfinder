@@ -12,9 +12,11 @@
 
 #include "../Graph.hpp"
 
+#include "../Application.hpp"
+
 using namespace std;
 
-bool DepthFirstSearch(Graph* graph, shared_ptr<sf::RenderWindow> windowRef);
+bool DepthFirstSearch(Application* appControls);
 
 
 #endif

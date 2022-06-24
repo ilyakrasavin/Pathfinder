@@ -3,6 +3,9 @@
 #include "textButtons.hpp"
 
 
+#include "Algorithms/A-Star.hpp"
+#include "Algorithms/BFS.hpp"
+#include "Algorithms/DFS.hpp"
 
 Application::Application(const string name){
 
@@ -82,7 +85,7 @@ void Application::mainFrameRate(const int limit){ mainWindowRef->setFramerateLim
 shared_ptr<sf::RenderWindow> Application::getMainWindowRef() const{ return mainWindowRef; }
 
 
-// Interface Rendering Controls
+// Renders and Draws Interface AND Cells
 const void Application::renderInterface() const{
 
     mainWindowRef->clear();
@@ -99,8 +102,31 @@ const void Application::renderInterface() const{
 
 }
 
+// Renders Cells Only (Used while Running an algorithm)
+const void Application::renderCells() const{
+    for(auto each: boardCells){
+        each->render(mainWindowRef);
+    }
+}
+
 const void Application::displayInterface() const{ mainWindowRef->display(); }
 
+
+
+void Application::runBFS() const{
+    Application* appControls = const_cast<Application*>(this);
+    BreadthFirstSearch(appControls);
+}
+
+void Application::runDFS() const{
+    Application* appControls = const_cast<Application*>(this);
+    DepthFirstSearch(appControls);
+}
+
+void Application::runAStar() const{
+    Application* appControls = const_cast<Application*>(this);
+    AStar(appControls);
+}
 
 
 // Resets Application State Variables
