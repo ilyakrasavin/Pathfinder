@@ -152,6 +152,17 @@ int main()
                     app.getStateRef()->astarModeSetting = 2;
                 }
 
+                // Choose AStar
+                else if(xPos >= 400 && xPos <= 600 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
+
+                    textBFS.setColor(sf::Color(169,169,169));
+                    textDFS.setColor(sf::Color(169,169,169));
+                    textAStar.setColor(sf::Color(169,169,169));
+                    
+                    app.getStateRef()->djkstra = true;
+                    app.getStateRef()->isAlgoChosen = true;
+
+                }
 
                 // Reset Pressed 
                 else if(xPos >= 220 && xPos <= 340 && yPos >= 1490 && yPos <= 1535){
@@ -310,6 +321,22 @@ int main()
                     app.runAStar();
 
                     app.getStateRef()->aStar = false;
+                }
+
+            }
+
+
+            if(app.getStateRef()->isFinishSet == true && app.getStateRef()->djkstra == true){
+
+                GraphWeighted WGraph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20, app.getStateRef()->tgtIdx, app.getStateRef()->astarModeSetting);
+                app.setWGraph(&WGraph);
+
+                // Resolve the Heuristic mode for A*
+                if(app.getStateRef()->isStartPressed){
+
+                    app.runDjkstra();
+
+                    app.getStateRef()->djkstra = false;
                 }
 
             }

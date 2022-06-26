@@ -188,10 +188,15 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx].get()->setNextDown(this->nodeMatrix[nodeMapIdx + idxIncrements]);
 
 
-            // Insert random distances to neighbouring nodes
+            // Initialize Weights and Distances to 1
             this->nodeMatrix[nodeMapIdx].get()->setNextRightDistance(1);
             this->nodeMatrix[nodeMapIdx].get()->setNext45DownDistance(1);
             this->nodeMatrix[nodeMapIdx].get()->setNextDownDistance(1);
+
+            this->nodeMatrix[nodeMapIdx].get()->setNextRightWeight(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNext45DownWeight(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNextDownWeight(1);
+
 
             continue;
 
@@ -214,6 +219,11 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextDownDistance(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45DownDistance(1);
 
+            this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
+
+
             continue;
 
         }
@@ -233,7 +243,12 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
 
             this->nodeMatrix[nodeMapIdx]->setNextRightDistance(1);
             this->nodeMatrix[nodeMapIdx]->setNext45UpDistance(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45DownDistance(1);
+
+            this->nodeMatrix[nodeMapIdx]->setNextRightWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNext45UpWeight(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
+
 
             continue;
 
@@ -256,6 +271,12 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setPrevLeftDistance(1);
             this->nodeMatrix[nodeMapIdx]->setNextUpDistance(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45UpDistance(1);
+
+
+
+            this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextUpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45UpWeight(1);
 
 
             continue;
@@ -284,6 +305,13 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextDownDistance(1);
             this->nodeMatrix[nodeMapIdx]->setNext45DownDistance(1);
 
+            this->nodeMatrix[nodeMapIdx]->setNextUpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNext45UpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextRightWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNext45DownWeight(1);
+
+
             continue;
 
         }
@@ -309,6 +337,13 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setPrevLeftDistance(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45DownDistance(1);
             this->nodeMatrix[nodeMapIdx]->setNextDownDistance(1);
+
+
+            this->nodeMatrix[nodeMapIdx]->setNextUpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45UpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
 
             continue;
 
@@ -336,6 +371,13 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextDownDistance(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45DownDistance(1);
 
+
+            this->nodeMatrix[nodeMapIdx]->setNextRightWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNext45DownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
+
             continue;
 
         }
@@ -360,6 +402,13 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextUpDistance(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45UpDistance(1);
             this->nodeMatrix[nodeMapIdx]->setPrevLeftDistance(1);
+
+
+            this->nodeMatrix[nodeMapIdx]->setNextRightWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNext45UpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextUpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45UpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
 
             continue;
 
@@ -396,6 +445,16 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNext45DownDistance(1);
             this->nodeMatrix[nodeMapIdx]->setNextRightDistance(1);
             this->nodeMatrix[nodeMapIdx]->setNext45UpDistance(1);
+
+
+            this->nodeMatrix[nodeMapIdx]->setNextUpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45UpWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNext45DownWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNextRightWeight(1);
+            this->nodeMatrix[nodeMapIdx]->setNext45UpWeight(1);
 
 
             continue;

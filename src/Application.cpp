@@ -6,6 +6,7 @@
 #include "Algorithms/A-Star.hpp"
 #include "Algorithms/BFS.hpp"
 #include "Algorithms/DFS.hpp"
+#include "Algorithms/Djkstra.hpp"
 
 Application::Application(const string name){
 
@@ -128,6 +129,10 @@ void Application::runAStar() const{
     AStar(appControls);
 }
 
+void Application::runDjkstra() const{
+    Application* appControls = const_cast<Application*>(this);
+    Djkstra(appControls);
+}
 
 // Resets Application State Variables
 void Application::resetState(){

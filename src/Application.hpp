@@ -88,6 +88,7 @@ class Application{
         void runDFS() const;
         void runBFS() const;
         void runAStar() const;
+        void runDjkstra() const;
 
     private:
 
