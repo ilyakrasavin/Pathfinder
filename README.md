@@ -11,7 +11,7 @@ Applications of presented algorithms are widely spread in the areas such as: Gam
 # Table of Contents  
 [Algorithms](#algorithms)  
 [Building](#Building-&-Compiling-(MacOS))  
-<a name="headers"/>
+<a name="headers">
 
 # Algorithms:
 
@@ -29,13 +29,14 @@ Applications of presented algorithms are widely spread in the areas such as: Gam
 
 ## A-Star
 
-|<img src="demos/AStar-Demo.gif" width=640 height = 640 hspace = 5/>|-Informed Search<br>-Underlying DS: Queue<br>-Heuristic-Based Node Expansion<br>-Shortest Path Guaranteed if Exists|
+|<img src="demos/AStar-demo.gif" width=640 height = 640 hspace = 5/>|-Informed Search<br>-Underlying DS: Queue<br>-Heuristic-Based Node Expansion<br>-Shortest Path Guaranteed if Exists|
 |--|--|
 
 
 ## Djkstra (WIP)
+|<img src="demos/Djkstra-demo.gif" width=640 height = 640 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Priority Queue<br>-Distance-Based Node Expansion<br>-Shortest Path To Each Node Guaranteed if Exists|
+|--|--|
 
-## UCS
 
 
 # Repository Contents:
@@ -75,17 +76,13 @@ Run the program:
 
 # TODO:
 
-- [ ] DJkstra
-- [ ] Verify BFS & DFS
-- [ ] Verify AStar
 - [ ] REPLACE Repeated code (State resets / window rendering loops etc.)
-- [ ] Fix AStar being trapped by a 90 degree wall
 - [ ] Add CMake functionality
 - [ ] Change and review all colour textures to better quality
 - [ ] FIX: Button rendering seg. fault if encapsulated in a manager class (Pointers likely)
 - [ ] FIX All warnings. They are potential errors
-- [ ] Review Pointers
 
+- [X] DJkstra
 - [X] Another graph class with weight & edges support
 - [X] Add edges
 - [X] Some Algorithm GUI & Basic info panel
@@ -95,3 +92,7 @@ Run the program:
 - [X] Implement Algorithm Selection AND proper restart feature
 - [X] Random Walls Generation 
 - [X] Persistent Estimator Board for AStar
+- [X] Verify BFS & DFS
+- [X] Verify AStar
+- [X] Fix AStar being trapped by a 90 degree wall (Heuristic Feature)
+- [X] Review Pointers
