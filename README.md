@@ -5,47 +5,51 @@
 ![C++](https://img.shields.io/badge/C++-black.svg?style=for-the-badge&logo=c%2B%2B&link=https://github.com/ilyakrasavin/)
 <img src="https://www.sfml-dev.org/download/goodies/sfml-logo-small.png" width="100" height="35"/>
 
-This educational project introduces interactive visualizations of well-known and widely used path-finding algorithms used on Graphs.
-Applications of presented algorithms are widely spread in the areas such as: Games, Scheduling / Assignment Problems, Social Networks, Recommendation Systems and Maps.
+This educational project features interactive visualizations of well-known and widely used path-finding algorithms used on Graphs.
+Applications of presented algorithms are widely spread in the areas such as: 
+- Games
+- Scheduling
+- Assignment Problems
+- Social Networks
+- Recommendation Systems and Maps.
 
-# Table of Contents  
-[Algorithms](#algorithms)  
-[Building](#Building-&-Compiling-(MacOS))  
-<a name="headers">
+This project is fully implemented in C++11. The Graphics library used is SFML 2.5.1
 
 # Algorithms:
 
 ## BFS
 
-|<img src="demos/BFS-demo.gif" width=640 height = 640 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Queue<br>-Level-By-Level Node Expansion<br>-Shortest Path Guaranteed if Exists|
+|<img src="demos/BFS-demo.gif" width=540 height = 540 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Queue<br>-Level-By-Level Node Expansion<br>-Shortest Path Guaranteed if Exists|
 |------|-------|
 
 
 ## DFS
 
-|<img src="demos/DFS-demo.gif" width=640 height = 640 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Stack<br>-Branch-By-Branch Node Expansion<br>-Shortest Path Not Guaranteed if Exists|
+|<img src="demos/DFS-demo.gif" width=540 height = 540 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Stack<br>-Branch-By-Branch Node Expansion<br>-Shortest Path Not Guaranteed if Exists|
 |--|--|
 
+## Djkstra
+|<img src="demos/Djkstra-demo.gif" width=540 height = 540 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Priority Queue<br>-Distance-Based Node Expansion<br>-Shortest Path To Each Node Guaranteed if Exists|
+|--|--|
 
 ## A-Star
 
-|<img src="demos/AStar-demo.gif" width=640 height = 640 hspace = 5/>|-Informed Search<br>-Underlying DS: Queue<br>-Heuristic-Based Node Expansion<br>-Shortest Path Guaranteed if Exists|
+|<img src="demos/AStar-demo.gif" width=540 height = 540 hspace = 5/>|-Informed Search<br>-Underlying DS: Queue<br>-Heuristic-Based Node Expansion<br>-Shortest Path Guaranteed if Exists|
 |--|--|
 
-
-## Djkstra (WIP)
-|<img src="demos/Djkstra-demo.gif" width=640 height = 640 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Priority Queue<br>-Distance-Based Node Expansion<br>-Shortest Path To Each Node Guaranteed if Exists|
-|--|--|
 
 
 
 # Repository Contents:
 
+```bash
 ├── assets-static
 ├── demos
 └── src
     ├── Algorithms
-
+```
+The main driver program 'main-visual.cpp' and manager/interface header and source files are located in src/ directory.<br>
+Algorithm Source and Header Files are located in src/Algorithms folder.
 
 # Building & Compiling (MacOS)
 
@@ -53,7 +57,7 @@ Applications of presented algorithms are widely spread in the areas such as: Gam
 
 Run the following in your terminal:
 
-```
+```bash
 brew install sfml
 ```
 
@@ -65,22 +69,30 @@ By default, SFML will be installed in the following folder on your machine:
 
 Indicate Include and Library paths to the compiler:
 ```
-g++ -std=c++11 main-visual.cpp -I /usr/local/Cellar/sfml/2.5.1_1/include -L /usr/local/Cellar/sfml/2.5.1_1/lib -lsfml-graphics -lsfml-window -lsfml-system
+g++ -g -std=c++11 -o pathfinder.out  main-visual.cpp Application.cpp Graph.cpp GraphWeighted.cpp Algorithms/BFS.cpp Algorithms/DFS.cpp Algorithms/A-Star.cpp Algorithms/Djkstra.cpp -I /usr/local/Cellar/sfml/2.5.1_1/include -L /usr/local/Cellar/sfml/2.5.1_1/lib -lsfml-graphics -lsfml-window -lsfml-system
 ```
 Run the program:
-```
-./a.out
-```
-# Known Issues:
 
+```
+./pathfinder.out
+```
 
-# TODO:
+# Controls
+Hold 'S' key and click to select the Starting Point<br>
+Hold 'F' key and click to select the Target Point<br>
+Hold 'W' key and click to manually place Walls<br>
+Click on 'Random Map' to generate a map<br>
+Click on 'Reset' to reset the program/algorithm state<br>
+Press 'Esc' key to exit the program<br>
+
+# TODO / Known Issues:
 
 - [ ] REPLACE Repeated code (State resets / window rendering loops etc.)
 - [ ] Add CMake functionality
 - [ ] Change and review all colour textures to better quality
 - [ ] FIX: Button rendering seg. fault if encapsulated in a manager class (Pointers likely)
 - [ ] FIX All warnings. They are potential errors
+- [ ] Prevent S/F/W clicks on buffer area
 
 - [X] DJkstra
 - [X] Another graph class with weight & edges support
