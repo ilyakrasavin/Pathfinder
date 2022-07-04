@@ -194,6 +194,7 @@ void Application::resetBoard(){
         boardCells.at(i)->resetAttributes();
         boardCells.at(i)->setTexture("../assets-static/node-empty.jpg");
         boardCells.at(i)->setScore(-1, i);
+        boardCells.at(i)->resetScore8Way();
         boardCells.at(i)->render(mainWindowRef);
     }
 
