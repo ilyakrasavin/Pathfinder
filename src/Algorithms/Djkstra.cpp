@@ -82,7 +82,7 @@ bool Djkstra(Application* appControls){
 
     }
 
-    sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+    // sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
 
 
     cout<<"Distance Initialization complete. Size of a vector is: "<<distances.size()<<endl;
@@ -98,7 +98,11 @@ bool Djkstra(Application* appControls){
         const shared_ptr<exploredDjkstra> smallestDistanceNode = distances.at(distanceHeap.back()->second.first);
         distanceHeap.pop_back(); 
     
-        sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());           
+        if(smallestDistanceNode->distanceTo == INT32_MAX){
+            continue;
+        }
+
+        // sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());           
 
         vector<shared_ptr<NodeExp>> neighbourNodes;
 
@@ -247,14 +251,14 @@ bool Djkstra(Application* appControls){
             /////////////////////////////////////////////////
 
             cout<<"If check completed"<<endl;
-            sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+            // sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
 
 
         }
 
         cout<<"Elements in a queue: "<<distanceHeap.size()<<endl;
 
-        sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+        // sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
 
 
         appControls->renderCells();
