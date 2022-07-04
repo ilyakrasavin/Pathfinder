@@ -1,36 +1,6 @@
 #include "Djkstra.hpp"
 
 
-// function Dijkstra(Graph, source):
-// 2      dist[source] ← 0                           // Initialization
-// 3
-// 4      create vertex priority queue Q
-// 5
-// 6      for each vertex v in Graph.Vertices:
-// 7          if v ≠ source
-// 8              dist[v] ← INT32_MAX                 // Unknown distance from source to v
-// 9              prev[v] ← UNDEFINED                // Predecessor of v
-// 10
-// 11         Q.add_with_priority(v, dist[v])
-// 12
-// 13
-// 14     while Q is not empty:                      // The main loop
-// 15         u ← Q.extract_min()                    // Remove and return best vertex
-// 16         for each neighbor v of u:              // only v that are still in Q
-// 17             alt ← dist[u] + Graph.Edges(u, v)
-// 18             if alt < dist[v] and dist[u] is not INT32_MAX:
-// 19                 dist[v] ← alt
-// 20                 prev[v] ← u
-// 21                 Q.decrease_priority(v, alt)
-// 22
-// 23     return dist, prev
-
-
-
-//////////////////////////////////////////////////
-// IMPLEMENT FIBONACCI QUEUE??
-//////////////////////////////////////////////////
-
 struct exploredDjkstra{
 
     int boardIdx;
@@ -41,15 +11,19 @@ struct exploredDjkstra{
 };
 
 
-
 struct CompareDistance {
-    bool operator()(shared_ptr<exploredDjkstra> p1, shared_ptr<exploredDjkstra> p2)
+    bool operator()(shared_ptr<pair<int, pair<int, int>>>& ptr1, shared_ptr<pair<int, pair<int, int>>>& ptr2)
     {
+
         // return "true" if "p1" is ordered
         // before "p2", for example:
-        return p1->distanceTo > p2->distanceTo;
+        return ptr1->first < ptr2->first;
     }
 };
+
+////////////////////////////
+// FIX: Distance changes after whole graph is traversed
+////////////////////////////
 
 
 bool Djkstra(Application* appControls){
@@ -62,9 +36,22 @@ bool Djkstra(Application* appControls){
 
     shared_ptr<NodeExp> currentNode = appControls->getWGraphRef()->getStartNode();
 
-
+    // DOES NOT WORK (No sorting post initial stage)
+    /////////////////////////////
     // Priority Queue
-    std::priority_queue<shared_ptr<exploredDjkstra>, vector<shared_ptr<exploredDjkstra>>, CompareDistance> distanceQueue;
+    // Stores a pair of Int and Pair <Int, Int> where:
+    // First int is DistanceTo
+    // Second pair is <Index, Parent Index>
+    // std::priority_queue<shared_ptr<pair<int, pair<int, int>>>, vector<shared_ptr<pair<int, pair<int, int>>>>, CompareDistance> distanceQueue;
+    /////////////////////////////
+
+
+    /////////////////////////////
+    // HEAP 
+    vector<shared_ptr<pair<int, pair<int, int>>>> distanceHeap;
+    make_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+    /////////////////////////////
+
 
     // Current Source to Node distances for every Node
     vector<shared_ptr<exploredDjkstra>> distances;
@@ -75,29 +62,43 @@ bool Djkstra(Application* appControls){
 
         shared_ptr<exploredDjkstra> exploredNode = make_shared<exploredDjkstra>();
 
+        if(appControls->getWGraphRef()->nodeMatrix.at(i)->getCellRef()->checkIsWall()){
+            distances.push_back(nullptr);
+            continue;
+        }
+
         exploredNode->boardIdx = i;
         exploredNode->distanceTo = (i == currentNode->getIdx()) ? 0 : INT32_MAX;
 
         cout<<"Distance set to "<<exploredNode->distanceTo<<endl;
 
         distances.push_back(exploredNode);
-        distanceQueue.push(exploredNode);
+
+        pair<int, int> indices = make_pair(exploredNode->boardIdx, exploredNode->parentIdx);
+        pair<int, pair<int, int>> total = make_pair(exploredNode->distanceTo, indices);
+        shared_ptr<pair<int, pair<int, int>>> newptr = make_shared<pair<int, pair<int, int>>>(total);
+        distanceHeap.push_back(newptr);
+        push_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
 
     }
 
-
-    for(auto each: distances){
-        cout<<&each.get()->boardIdx<<endl;
-    }
+    sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
 
 
     cout<<"Distance Initialization complete. Size of a vector is: "<<distances.size()<<endl;
+    cout<<"Nodes in a priority queue: "<<distanceHeap.size()<<endl;
 
-    while(!distanceQueue.empty()){
+    while(!distanceHeap.empty()){
+
+        cout<<"Extracting the top element off the queue..."<<endl;
 
         // Extracts the element with minimal distance
-        shared_ptr<exploredDjkstra> smallestDistanceNode = distanceQueue.top();
-        distanceQueue.pop();
+
+        pop_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+        const shared_ptr<exploredDjkstra> smallestDistanceNode = distances.at(distanceHeap.back()->second.first);
+        distanceHeap.pop_back(); 
+    
+        sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());           
 
         vector<shared_ptr<NodeExp>> neighbourNodes;
 
@@ -127,12 +128,16 @@ bool Djkstra(Application* appControls){
                 continue;
             }
 
-
-            cout<<"Traversing neighbour"<<endl;
-
             int fullDistance;
             int neighbourIdx = each->getIdx();
-            
+
+            cout<<"Traversing neighbour at index: "<<neighbourIdx<<endl;
+
+
+            if(each == nullptr || distances.at(neighbourIdx) == nullptr){
+                continue;
+            }
+
             cout<<"computing boolean checks"<<endl;
 
             // Boolean Location 
@@ -149,6 +154,8 @@ bool Djkstra(Application* appControls){
                             || isRightEdge || isBottomLeft || isBottomEdge || isBottomRight)};
 
             cout<<"Boolean checks computed"<<endl;
+
+
 
             // Node is NextRight and Node is not a Right Top/Bottom/Edge Node
             if((neighbourIdx == (smallestDistanceNode->boardIdx + 1)) && !(isTopRight || isRightEdge || isBottomRight)){
@@ -191,13 +198,24 @@ bool Djkstra(Application* appControls){
             }
 
 
+            cout<<isTopLeft<<endl;
+            cout<<isTopEdge<<endl;
+            cout<<isTopRight<<endl;
+            cout<<isLeftEdge<<endl;
+            cout<<isRightEdge<<endl;
+            cout<<isBottomLeft<<endl;
+            cout<<isBottomEdge<<endl;
+            cout<<isBottomRight<<endl;
+            cout<<isMiddle<<endl;
+
+
             cout<<"Node determined and fullDistance computed"<<endl;
             cout<<"Comparing new distance"<<endl;
 
             cout<<"Fulldistance set to: "<<fullDistance<<endl;
             cout<<"Neighbour Index is: "<<neighbourIdx<<endl;
-            cout<<"Recorded distance to Neigbour is: "<<distances[neighbourIdx].get()->distanceTo<<endl;
-            cout<<"Is Recorded distance to Origin equal to INT32_MAX? "<<(smallestDistanceNode->distanceTo != INT32_MAX)<<endl;
+            cout<<"Recorded distance to Neigbour is: "<<distances.at(neighbourIdx)->distanceTo<<endl;
+            cout<<"Is Recorded distance to Origin equal to INT32_MAX? "<<(smallestDistanceNode->distanceTo == INT32_MAX)<<endl;
 
             /////////////////////////////////////////////////
             // Compare the distance on newfound path with distance previously in the list
@@ -209,23 +227,35 @@ bool Djkstra(Application* appControls){
                 distances.at(neighbourIdx)->distanceTo = fullDistance;
                 distances.at(neighbourIdx)->parentIdx = smallestDistanceNode->boardIdx;
 
-                // update the distance queue with node of lower priority
-                distanceQueue.push(distances.at(neighbourIdx));
 
-                // neighbour->getCellRef()->setExplored();
+                // update the distance queue with node of lower priority
+                pair<int, int> indices = make_pair(neighbourIdx, distances.at(neighbourIdx)->parentIdx);
+                pair<int, pair<int, int>> total = make_pair(fullDistance, indices);
+                distanceHeap.push_back(make_shared<pair<int, pair<int, int>>>(total));
+                push_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+
+
                 each->getCellRef()->setTexture("../assets-static/node-neighbour.jpg");
                 each->getCellRef()->setScore(fullDistance, neighbourIdx);
 
                 appControls->renderCells();
                 appControls->displayInterface();
+
+                // sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+
             }
             /////////////////////////////////////////////////
 
-            else{
-                continue;
-            }
+            cout<<"If check completed"<<endl;
+            sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+
 
         }
+
+        cout<<"Elements in a queue: "<<distanceHeap.size()<<endl;
+
+        sort_heap(distanceHeap.begin(), distanceHeap.end(), CompareDistance());
+
 
         appControls->renderCells();
         appControls->displayInterface();
@@ -234,24 +264,6 @@ bool Djkstra(Application* appControls){
     }
 
 
-// while Q is not empty:                      // The main loop
-// 15         u ← Q.extract_min()                    // Remove and return best vertex
-// 16         for each neighbor v of u:              // only v that are still in Q
-// 17             alt ← dist[u] + Graph.Edges(u, v)
-// 18             if alt < dist[v] and dist[u] is not INT32_MAX:
-// 19                 dist[v] ← alt
-// 20                 prev[v] ← u
-// 21                 Q.decrease_priority(v, alt)
-
-
-
     return false;
 }
-
-
-
-
-
-
-
 
