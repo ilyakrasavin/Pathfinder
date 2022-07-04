@@ -82,6 +82,9 @@ class NodeExp : public Node{
         int getNext45DownDistance() const;
 
 
+        void setScore8Way();
+
+
         void setEstimate(int est);
         void setCurrent(int cur);
 

@@ -101,6 +101,10 @@ const int NodeExp::getCurrent(){return this->curScore;}
 const int NodeExp::getFScore(){return this->heurEst + this->curScore;}
 
 
+void NodeExp::setScore8Way(){
+    this->cellRef->setScore8Way(nextRightDistance, next45UpDistance, nextUpDistance, prev45UpDistance, prevLeftDistance, prev45DownDistance, nextDownDistance, next45DownDistance);
+}
+
 
 void NodeExp::setNextRight(shared_ptr<NodeExp> nextRight){this->nextRight = nextRight;}
 void NodeExp::setPrevLeft(shared_ptr<NodeExp> prevLeft){this->prevLeft = prevLeft;}
@@ -122,16 +126,14 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
 
         shared_ptr<NodeExp> newNode = make_shared<NodeExp>(cell, mapIdx, cell->checkIsStart(), cell->checkIsWall(), cell->checkIsExplored(), cell->checkIsTarget());
 
-        
         int heuristicRes = 0;
 
         if(heuristic == -1){
-
             nodeMatrix.push_back(newNode);
             continue;
         }
 
-        if(heuristic == 0){
+        else if(heuristic == 0){
             
             heuristicRes = this->EuclidianDistance(mapIdx, 20, 17);
             
@@ -153,8 +155,7 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             newNode->getCellRef()->setScore(heuristicRes, mapIdx);
         }
 
-        
-
+    
         nodeMatrix.push_back(newNode);
 
         cout<<"Node "<<mapIdx<<" Created!"<<endl;
@@ -207,9 +208,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx].get()->setNext45DownWeight(1);
             this->nodeMatrix[nodeMapIdx].get()->setNextDownWeight(1);
 
-
-            continue;
-
         }
 
         // Top Right Node
@@ -233,8 +231,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
 
-
-            continue;
 
         }
 
@@ -260,7 +256,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
 
 
-            continue;
 
         }
 
@@ -289,7 +284,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setPrev45UpWeight(1);
 
 
-            continue;
 
         }
 
@@ -322,7 +316,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNext45DownWeight(1);
 
 
-            continue;
 
         }
 
@@ -355,7 +348,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
             this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
 
-            continue;
 
         }
 
@@ -375,12 +367,11 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextDown(this->nodeMatrix[nodeMapIdx + idxIncrements]);
             this->nodeMatrix[nodeMapIdx]->setPrev45down(this->nodeMatrix[nodeMapIdx + idxIncrements - 1]);
 
-            this->nodeMatrix[nodeMapIdx]->setNextRightDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setPrevLeftDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setNext45DownDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setNextDownDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setPrev45DownDistance(1);
-
+            this->nodeMatrix[nodeMapIdx].get()->setNextRightDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setPrevLeftDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNext45DownDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNextDownDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setPrev45DownDistance(1);
 
             this->nodeMatrix[nodeMapIdx]->setNextRightWeight(1);
             this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
@@ -388,7 +379,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextDownWeight(1);
             this->nodeMatrix[nodeMapIdx]->setPrev45DownWeight(1);
 
-            continue;
 
         }
 
@@ -420,7 +410,6 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setPrev45UpWeight(1);
             this->nodeMatrix[nodeMapIdx]->setPrevLeftWeight(1);
 
-            continue;
 
         }
 
@@ -447,14 +436,14 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNextRight(this->nodeMatrix[nodeMapIdx +1]);
             this->nodeMatrix[nodeMapIdx]->setNext45up(this->nodeMatrix[nodeMapIdx - idxIncrements + 1]);
 
-            this->nodeMatrix[nodeMapIdx]->setNextUpDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setPrev45UpDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setPrevLeftDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setPrev45DownDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setNextDownDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setNext45DownDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setNextRightDistance(1);
-            this->nodeMatrix[nodeMapIdx]->setNext45UpDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNextUpDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setPrev45UpDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setPrevLeftDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setPrev45DownDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNextDownDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNext45DownDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNextRightDistance(1);
+            this->nodeMatrix[nodeMapIdx].get()->setNext45UpDistance(1);
 
 
             this->nodeMatrix[nodeMapIdx]->setNextUpWeight(1);
@@ -467,6 +456,11 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
             this->nodeMatrix[nodeMapIdx]->setNext45UpWeight(1);
 
 
+        }
+
+        if(heuristic == -1){
+
+            this->nodeMatrix.at(nodeMapIdx)->setScore8Way();
             continue;
         }
         
