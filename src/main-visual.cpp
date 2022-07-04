@@ -22,23 +22,12 @@ using std::string, std::cout, std::endl, std::shared_ptr;
 
 // TODO:
 
-// DJkstra
-
-// Verify BFS & DFS
-// Verify AStar
-
+// ASTAR Neighbour traversal order
 // REPLACE Repeated code (State resets / window rendering loops etc.)
-
-// Fix AStar being trapped by a 90 degree wall
-
 // Add CMake functionality
-
 // Change and review all colour textures to better quality
-
 // FIX: Button rendering seg. fault if encapsulated in a manager class (Pointers likely)
-
 // FIX All warnings. They are potential errors
-
 // FIX DFS stale finish close to start (Neighbour expansion and removal order?)
 
 ///////////////////////////////////////////////////
@@ -54,6 +43,7 @@ using std::string, std::cout, std::endl, std::shared_ptr;
 // 2. Implement Algorithm Selection AND proper restart feature
 // Random Walls Generation 
 // Persistent Estimator Board for AStar
+// Fix AStar being trapped by a 90 degree wall -> !!! This is a feature of heuristic based algorithms !!!
 
 
 ///////////////////////////////////////////////////
@@ -326,9 +316,9 @@ int main()
             }
 
 
-            if(app.getStateRef()->isFinishSet == true && app.getStateRef()->djkstra == true){
+            if(app.getStateRef()->isStartSet == true && app.getStateRef()->djkstra == true && app.getStateRef()->isStartPressed){
 
-                GraphWeighted WGraph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20, app.getStateRef()->tgtIdx, app.getStateRef()->astarModeSetting);
+                GraphWeighted WGraph(app.getboardRef(), app.getMainWindowRef(), app.getStateRef()->startIdx, 20, app.getStateRef()->tgtIdx, -1);
                 app.setWGraph(&WGraph);
 
                 // Resolve the Heuristic mode for A*
@@ -341,18 +331,6 @@ int main()
 
             }
 
-            // if(app.getStateRef()->isResetPressed){
-
-            //     // Resets Application state variables / Board Textures & Attributes
-            //     app.resetState();
-            //     app.resetBoard();
-
-            //     app.drawMenu();
-
-            //     app.displayInterface();
-
-            //     break;
-            // }
 
         }
 
