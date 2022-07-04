@@ -125,25 +125,35 @@ GraphWeighted::GraphWeighted(const vector<shared_ptr<mapCell>>* board, const sha
         
         int heuristicRes = 0;
 
+        if(heuristic == -1){
+
+            nodeMatrix.push_back(newNode);
+            continue;
+        }
+
         if(heuristic == 0){
             
             heuristicRes = this->EuclidianDistance(mapIdx, 20, 17);
             
+            newNode->setEstimate(heuristicRes);
+            newNode->getCellRef()->setScore(heuristicRes, mapIdx);
         }
         else if(heuristic == 1){
             
             heuristicRes = this->ManhattanDistance(mapIdx, 20, 17);
 
+            newNode->setEstimate(heuristicRes);
+            newNode->getCellRef()->setScore(heuristicRes, mapIdx);
         }
         else{
 
             heuristicRes = this->ChebyshevDistance(mapIdx, 20, 17);
 
+            newNode->setEstimate(heuristicRes);
+            newNode->getCellRef()->setScore(heuristicRes, mapIdx);
         }
 
         
-        newNode->setEstimate(heuristicRes);
-        newNode->getCellRef()->setScore(heuristicRes, mapIdx);
 
         nodeMatrix.push_back(newNode);
 
