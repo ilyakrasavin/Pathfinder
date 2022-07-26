@@ -19,13 +19,13 @@ This project is fully implemented in C++11. The Graphics library used is SFML 2.
 
 ## BFS
 
-|<img src="demos/BFS-demo.gif" width=540 height = 540 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Queue<br>-Level-By-Level Node Expansion<br>-Shortest Path Guaranteed if Exists|
+|<img src="demos/bfs-demo.gif" width=540 height = 540 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Queue<br>-Level-By-Level Node Expansion<br>-Shortest Path Guaranteed if Exists|
 |------|-------|
 
 
 ## DFS
 
-|<img src="demos/DFS-demo.gif" width=540 height = 540 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Stack<br>-Branch-By-Branch Node Expansion<br>-Shortest Path Not Guaranteed if Exists|
+|<img src="demos/dfs-demo.gif" width=540 height = 540 hspace = 5/>|-Uninformed Search<br>-Underlying DS: Stack<br>-Branch-By-Branch Node Expansion<br>-Shortest Path Not Guaranteed if Exists|
 |--|--|
 
 ## Djkstra
