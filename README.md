@@ -85,26 +85,3 @@ Click on 'Random Map' to generate a map<br>
 Click on 'Reset' to reset the program/algorithm state<br>
 Press 'Esc' key to exit the program<br>
 
-# TODO / Known Issues:
-
-- [ ] REPLACE Repeated code (State resets / window rendering loops etc.)
-- [ ] Add CMake functionality
-- [ ] Change and review all colour textures to better quality
-- [ ] FIX: Button rendering seg. fault if encapsulated in a manager class (Pointers likely)
-- [ ] FIX All warnings. They are potential errors
-- [ ] Prevent S/F/W clicks on buffer area
-
-- [X] DJkstra
-- [X] Another graph class with weight & edges support
-- [X] Add edges
-- [X] Some Algorithm GUI & Basic info panel
-- [X] theory
-- [X] FIX THE WALLS BEING IGNORED & OVERWRITTEN! -> New objects created on stack produced a problem (copies located in a vector => No reference to actual object)
-- [X] Decide on & implement the final interface !!
-- [X] Implement Algorithm Selection AND proper restart feature
-- [X] Random Walls Generation 
-- [X] Persistent Estimator Board for AStar
-- [X] Verify BFS & DFS
-- [X] Verify AStar
-- [X] Fix AStar being trapped by a 90 degree wall (Heuristic Feature)
-- [X] Review Pointers

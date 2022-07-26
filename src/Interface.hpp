@@ -122,7 +122,7 @@ class mapCell : public Sprite2DComponent{
             scoreLabel.setFont(this->font);
             scoreLabel.setCharacterSize(35);
 
-			scoreLabel.setColor(sf::Color::Red);
+			scoreLabel.setFillColor(sf::Color::Red);
 			scoreLabel.setPosition(80 * (idx % 20) + 25, 80 * div(idx, 20).quot + 80 + 12);
 
         }

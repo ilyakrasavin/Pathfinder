@@ -199,17 +199,17 @@ void Application::resetBoard(){
     }
 
     // Reset Button Colours
-    textBFS.setColor(sf::Color::Yellow);
-    textDFS.setColor(sf::Color::Yellow);
-    textAStar.setColor(sf::Color::Yellow);
-    textDjkstra.setColor(sf::Color::Yellow);
-    textStart.setColor(sf::Color::Yellow);
-    textReset.setColor(sf::Color::Yellow);
-    textRandom.setColor(sf::Color::Yellow);
+    textBFS.setFillColor(sf::Color::Yellow);
+    textDFS.setFillColor(sf::Color::Yellow);
+    textAStar.setFillColor(sf::Color::Yellow);
+    textDjkstra.setFillColor(sf::Color::Yellow);
+    textStart.setFillColor(sf::Color::Yellow);
+    textReset.setFillColor(sf::Color::Yellow);
+    textRandom.setFillColor(sf::Color::Yellow);
 
-    textCheb.setColor(sf::Color::Yellow);
-    textManh.setColor(sf::Color::Yellow);
-    textEuc.setColor(sf::Color::Yellow);
+    textCheb.setFillColor(sf::Color::Yellow);
+    textManh.setFillColor(sf::Color::Yellow);
+    textEuc.setFillColor(sf::Color::Yellow);
 
     drawMenu();
 

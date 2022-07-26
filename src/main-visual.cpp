@@ -82,9 +82,9 @@ int main()
                 // Choose BFS
                 if(xPos >= 80 && xPos <= 160 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
 
-                    textDFS.setColor(sf::Color(169,169,169));
-                    textAStar.setColor(sf::Color(169,169,169));
-                    textDjkstra.setColor(sf::Color(169,169,169));
+                    textDFS.setFillColor(sf::Color(169,169,169));
+                    textAStar.setFillColor(sf::Color(169,169,169));
+                    textDjkstra.setFillColor(sf::Color(169,169,169));
 
                     app.getStateRef()->breadthFirstSearch = true;
                     app.getStateRef()->isAlgoChosen = true;
@@ -94,9 +94,9 @@ int main()
                 // Choose DFS
                 else if(xPos >= 200 && xPos <= 285 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
 
-                    textBFS.setColor(sf::Color(169,169,169));
-                    textAStar.setColor(sf::Color(169,169,169));
-                    textDjkstra.setColor(sf::Color(169,169,169));
+                    textBFS.setFillColor(sf::Color(169,169,169));
+                    textAStar.setFillColor(sf::Color(169,169,169));
+                    textDjkstra.setFillColor(sf::Color(169,169,169));
 
                     app.getStateRef()->depthFirstSearch = true;
                     app.getStateRef()->isAlgoChosen = true;
@@ -106,9 +106,9 @@ int main()
                 // Choose AStar
                 else if(xPos >= 330 && xPos <= 380 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
 
-                    textBFS.setColor(sf::Color(169,169,169));
-                    textDFS.setColor(sf::Color(169,169,169));
-                    textDjkstra.setColor(sf::Color(169,169,169));
+                    textBFS.setFillColor(sf::Color(169,169,169));
+                    textDFS.setFillColor(sf::Color(169,169,169));
+                    textDjkstra.setFillColor(sf::Color(169,169,169));
                     
                     app.getStateRef()->aStar = true;
                     app.getStateRef()->isAlgoChosen = true;
@@ -120,34 +120,34 @@ int main()
                 // AStar: Euclidian
                 else if(xPos >= 460 && xPos <= 646 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
 
-                    textEuc.setColor(sf::Color::Yellow);
-                    textManh.setColor(sf::Color(169,169,169));
-                    textCheb.setColor(sf::Color(169,169,169));
+                    textEuc.setFillColor(sf::Color::Yellow);
+                    textManh.setFillColor(sf::Color(169,169,169));
+                    textCheb.setFillColor(sf::Color(169,169,169));
                     app.getStateRef()->astarModeSetting = 0;
                 }
 
                 // AStar: Manhattan
                 else if(xPos >= 700 && xPos <= 920 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
-                    textEuc.setColor(sf::Color(169,169,169));
-                    textCheb.setColor(sf::Color(169,169,169));
-                    textManh.setColor(sf::Color::Yellow);
+                    textEuc.setFillColor(sf::Color(169,169,169));
+                    textCheb.setFillColor(sf::Color(169,169,169));
+                    textManh.setFillColor(sf::Color::Yellow);
                     app.getStateRef()->astarModeSetting = 1;
                 }
 
                 // AStar: Chebushev
                 else if(xPos >= 970 && xPos <= 1200 && yPos >= 20 && yPos <= 65 && app.getStateRef()->isAlgoChosen && app.getStateRef()->aStar){
-                    textManh.setColor(sf::Color(169,169,169));
-                    textEuc.setColor(sf::Color(169,169,169));
-                    textCheb.setColor(sf::Color::Yellow);
+                    textManh.setFillColor(sf::Color(169,169,169));
+                    textEuc.setFillColor(sf::Color(169,169,169));
+                    textCheb.setFillColor(sf::Color::Yellow);
                     app.getStateRef()->astarModeSetting = 2;
                 }
 
                 // Choose AStar
                 else if(xPos >= 400 && xPos <= 600 && yPos >= 25 && yPos <= 60 && !app.getStateRef()->isAlgoChosen){
 
-                    textBFS.setColor(sf::Color(169,169,169));
-                    textDFS.setColor(sf::Color(169,169,169));
-                    textAStar.setColor(sf::Color(169,169,169));
+                    textBFS.setFillColor(sf::Color(169,169,169));
+                    textDFS.setFillColor(sf::Color(169,169,169));
+                    textAStar.setFillColor(sf::Color(169,169,169));
                     
                     app.getStateRef()->djkstra = true;
                     app.getStateRef()->isAlgoChosen = true;
@@ -171,7 +171,7 @@ int main()
 
                 // Pressed Start
                 else if(xPos >= 80 && xPos <= 180 && yPos >= 1490 && yPos <= 1535){
-                    textStart.setColor(sf::Color(169,169,169));
+                    textStart.setFillColor(sf::Color(169,169,169));
 
                     app.getStateRef()->isStartPressed = true;
                 }
